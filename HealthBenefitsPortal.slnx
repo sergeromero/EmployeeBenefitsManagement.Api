@@ -1,0 +1,17 @@
+<Solution>
+  <Folder Name="/10.UI/" />
+  <Folder Name="/15.Common/">
+    <Project Path="Benefits.Common/Benefits.Common.csproj" />
+    <Project Path="Benefits.Domain/Benefits.Domain.csproj" />
+  </Folder>
+  <Folder Name="/20.API/">
+    <Project Path="HealthBenefitsPortal/HealthBenefitsPortal.csproj" />
+  </Folder>
+  <Folder Name="/30.Application/">
+    <Project Path="Benefits.Application/Benefits.Application.csproj" />
+  </Folder>
+  <Folder Name="/40.Infrastructure/">
+    <Project Path="Benefits.Infrastructure/Benefits.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/90.Tests/" />
+</Solution>

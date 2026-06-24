@@ -1,0 +1,16 @@
+@rootURL = http://localhost:5109
+
+GET {{rootURL}}/weatherforecast/
+Accept: application/json
+
+###
+POST {{rootURL}}/api/employees/
+Content-Type: application/json
+{
+  "employeenumber" : "11111111",
+  "firstname" : "Serge",
+  "lastname" : "Romero",
+  "email" : "serge@mydomain.com",
+  "departmentid" : "1"
+}
+
