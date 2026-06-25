@@ -11,7 +11,7 @@ namespace Benefits.Application.Behaviors
 
         public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
-            _validators = Argument.NotNull(validators, nameof(validators));
+            _validators = Guard.NotNull(validators);
         }
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)

@@ -1,5 +1,7 @@
-﻿using Benefits.Application.Features.Employees.CreateEmployee;
+﻿using Benefits.Application.Features.Employees.Common;
+using Benefits.Application.Features.Employees.CreateEmployee;
 using Benefits.Application.Features.Employees.Queries.GetEmployeeById;
+using Benefits.Application.Features.Employees.Queries.SearchEmployees;
 using Benefits.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +16,7 @@ namespace HealthBenefitsPortal.Controllers
 
         public EmployeesController(IMediator mediator)
         {
-            _mediator = Argument.NotNull(mediator, nameof(mediator));
+            _mediator = Guard.NotNull(mediator);
         }
 
         [HttpPost]
@@ -26,7 +28,7 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<GetEmployeeByIdResponse>> GetById(int id)
+        public async Task<ActionResult<EmployeeBasicInfoDto>> GetById(int id)
         {
             var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
 
@@ -36,6 +38,14 @@ namespace HealthBenefitsPortal.Controllers
             }
 
             return Ok(employee);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<EmployeeBasicInfoDto>>> Search([FromQuery] SearchEmployeesQuery query, CancellationToken cancellationToken)
+        {
+            var employees = await _mediator.Send(query, cancellationToken);
+
+            return Ok(employees);
         }
     }
 }

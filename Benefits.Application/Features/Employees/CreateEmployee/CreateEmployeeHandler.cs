@@ -11,7 +11,7 @@ namespace Benefits.Application.Features.Employees.CreateEmployee
 
         public CreateEmployeeHandler(IBenefitsDbContext dbContext)
         {
-            _dbContext = Argument.NotNull(dbContext, nameof(dbContext));
+            _dbContext = Guard.NotNull(dbContext);
         }
 
         public async Task<int> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)

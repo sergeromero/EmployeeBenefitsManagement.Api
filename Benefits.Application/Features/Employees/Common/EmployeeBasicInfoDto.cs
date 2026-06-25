@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Benefits.Application.Features.Employees.Queries.GetEmployeeById
+namespace Benefits.Application.Features.Employees.Common
 {
-    public class GetEmployeeByIdResponse
+    public class EmployeeBasicInfoDto
     {
         public int Id { get; set; }
         public int EmployeeNumber { get; set; }

@@ -10,7 +10,7 @@ namespace HealthBenefitsPortal.Middleware
         private readonly ILogger<GlobalExceptionHandler> _logger;
         public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
         {
-            _logger = Argument.NotNull(logger, nameof(logger));
+            _logger = Guard.NotNull(logger);
         }
 
         public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
@@ -21,7 +21,7 @@ namespace HealthBenefitsPortal.Middleware
 
             httpContext.Response.StatusCode = problemDetails.Status ?? 500;
 
-            await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken).ConfigureAwait(false);
+            await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
 
             return true;
         }
