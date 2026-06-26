@@ -2,6 +2,7 @@
 using Benefits.Application.Features.Employees.CreateEmployee;
 using Benefits.Application.Features.Employees.Queries.GetEmployeeById;
 using Benefits.Application.Features.Employees.Queries.SearchEmployees;
+using Benefits.Application.Features.Employees.UpdateEmployee;
 using Benefits.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -46,6 +47,25 @@ namespace HealthBenefitsPortal.Controllers
             var employees = await _mediator.Send(query, cancellationToken);
 
             return Ok(employees);
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> UpdateEmployee(int id, UpdateEmployeeDto dto)
+        {
+            var command = new UpdateEmployeeCommand
+            (
+                id,
+                dto.EmployeeNumber,
+                dto.FirstName,
+                dto.LastName,
+                dto.Email,
+                dto.HireDate,
+                dto.DepartmentId
+            );
+
+            await _mediator.Send(command);
+
+            return NoContent();
         }
     }
 }

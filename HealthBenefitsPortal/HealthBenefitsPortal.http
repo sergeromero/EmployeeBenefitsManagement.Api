@@ -7,10 +7,21 @@ Accept: application/json
 POST {{rootURL}}/api/employees/
 Content-Type: application/json
 {
-  "employeenumber" : "11111111",
-  "firstname" : "Serge",
-  "lastname" : "Romero",
-  "email" : "serge@mydomain.com",
-  "departmentid" : "1"
+  "employeeNumber" : "11111111",
+  "firstName" : "Serge",
+  "lastName" : "Romero",
+  "eMail" : "serge@mydomain.com",
+  "departmentId" : "1"
 }
 
+###
+PUT {{rootURL}}/api/employees/1
+Content-Type: application/json
+{
+  "employeeNumber" : "22222222",
+  "firstName" : "Serge",
+  "lastName" : "Romero",
+  "eMail" : "serge@mydomain.com",
+  "hireDate" : "2015-03-25",
+  "departmentId" : 1
+}

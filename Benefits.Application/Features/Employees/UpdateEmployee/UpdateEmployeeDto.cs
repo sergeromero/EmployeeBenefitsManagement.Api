@@ -1,8 +1,7 @@
-﻿namespace Benefits.Application.Features.Employees.Common
+﻿namespace Benefits.Application.Features.Employees.UpdateEmployee
 {
-    public class EmployeeBasicInfoDto
+    public class UpdateEmployeeDto
     {
-        public int Id { get; set; }
         public int EmployeeNumber { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
