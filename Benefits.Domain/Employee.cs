@@ -9,5 +9,11 @@
         public DateTime HireDate {  get; set; }
         public int DepartmentId {  get; set; }
         public Department Department { get; set; } = null!;
+        public bool IsActive { get; set; } = true;
+
+        public void Deactivate()
+        {
+            this.IsActive = false;
+        }
     }
 }

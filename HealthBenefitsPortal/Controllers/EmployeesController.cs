@@ -1,5 +1,6 @@
 ﻿using Benefits.Application.Features.Employees.Common;
 using Benefits.Application.Features.Employees.CreateEmployee;
+using Benefits.Application.Features.Employees.DeleteEmployee;
 using Benefits.Application.Features.Employees.Queries.GetEmployeeById;
 using Benefits.Application.Features.Employees.Queries.SearchEmployees;
 using Benefits.Application.Features.Employees.UpdateEmployee;
@@ -65,6 +66,15 @@ namespace HealthBenefitsPortal.Controllers
 
             await _mediator.Send(command);
 
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> DeleteEmployee(int id)
+        {
+            var command = new DeleteEmployeeCommand(id);
+
+            await _mediator.Send(command);
             return NoContent();
         }
     }

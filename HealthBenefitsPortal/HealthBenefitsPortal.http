@@ -25,3 +25,6 @@ Content-Type: application/json
   "hireDate" : "2015-03-25",
   "departmentId" : 1
 }
+
+###
+DELETE {{rootURL}}/api/employees/1
