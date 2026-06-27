@@ -1,4 +1,5 @@
-﻿using Domain;
+﻿using Benefits.Domain;
+using Domain;
 using Microsoft.EntityFrameworkCore;
 
 namespace Benefits.Application.Infrastructure.Contracts
@@ -9,5 +10,6 @@ namespace Benefits.Application.Infrastructure.Contracts
 
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<BenefitType> BenefitTypes { get; set; }
     }
 }

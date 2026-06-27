@@ -1,4 +1,4 @@
-﻿namespace Domain
+﻿namespace Benefits.Domain
 {
     public abstract class Entity
     {

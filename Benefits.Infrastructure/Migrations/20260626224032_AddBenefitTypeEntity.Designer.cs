@@ -4,6 +4,7 @@ using Benefits.Infrastructure.Persistance;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Benefits.Infrastructure.Migrations
 {
     [DbContext(typeof(BenefitsDbContext))]
-    partial class BenefitsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260626224032_AddBenefitTypeEntity")]
+    partial class AddBenefitTypeEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

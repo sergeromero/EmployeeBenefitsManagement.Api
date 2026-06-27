@@ -1,4 +1,6 @@
-﻿namespace Domain
+﻿using Benefits.Domain;
+
+namespace Domain
 {
     public class Department : Entity
     {

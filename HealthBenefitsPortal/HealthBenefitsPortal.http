@@ -28,3 +28,10 @@ Content-Type: application/json
 
 ###
 DELETE {{rootURL}}/api/employees/1
+
+###
+POST {{rootURL}}/api/benefittypes/
+Content-Type: application/json
+{
+  "name" : "Health"
+}
