@@ -37,6 +37,10 @@ Content-Type: application/json
 }
 
 ###
+
+GET {{rootURL}}/api/benefittypes/2/plans
+
+###
 POST {{rootURL}}/api/benefitplans/
 Content-Type: application/json
 {

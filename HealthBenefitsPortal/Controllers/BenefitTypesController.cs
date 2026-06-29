@@ -1,4 +1,5 @@
 ﻿using Benefits.Application.Features.BenefitTypes.CreateBenefitTypes;
+using Benefits.Application.Features.BenefitTypes.Queries.GetBenefitPlansByType;
 using Benefits.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -28,6 +29,14 @@ namespace HealthBenefitsPortal.Controllers
         public async Task<ActionResult> GetById(int id)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpGet("{id:int}/plans")]
+        public async Task<ActionResult<IReadOnlyList<BenefitPlanListItemDto>>> GetPlans([FromRoute] GetBenefitPlansByTypeQuery query)
+        {
+            var plans = await _mediator.Send(query);
+
+            return Ok(plans);
         }
     }
 }
