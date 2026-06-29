@@ -11,5 +11,6 @@ namespace Benefits.Application.Infrastructure.Contracts
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<BenefitType> BenefitTypes { get; set; }
+        public DbSet<BenefitPlan> BenefitPlans { get; set; }
     }
 }

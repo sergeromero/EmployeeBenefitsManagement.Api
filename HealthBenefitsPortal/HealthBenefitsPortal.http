@@ -35,3 +35,12 @@ Content-Type: application/json
 {
   "name" : "Health"
 }
+
+###
+POST {{rootURL}}/api/benefitplans/
+Content-Type: application/json
+{
+  "name" : "Gold Health Plan",
+  "description" : "Aimed at people with families.",
+  "benefitTypeId" : "1"
+}

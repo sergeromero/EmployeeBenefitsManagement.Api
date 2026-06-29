@@ -7,11 +7,11 @@ namespace HealthBenefitsPortal.Controllers
 {
     [ApiController]
     [Route("api/benefittypes")]
-    public class BenefitTypes : ControllerBase
+    public class BenefitTypesController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public BenefitTypes(IMediator mediator)
+        public BenefitTypesController(IMediator mediator)
         {
             _mediator = Guard.NotNull(mediator);
         }

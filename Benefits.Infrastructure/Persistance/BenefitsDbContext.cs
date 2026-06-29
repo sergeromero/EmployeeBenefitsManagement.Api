@@ -14,5 +14,7 @@ namespace Benefits.Infrastructure.Persistance
         public DbSet<Employee> Employees { get; set; } = null!;
 
         public DbSet<BenefitType> BenefitTypes { get; set; } = null!;
+
+        public DbSet<BenefitPlan> BenefitPlans { get; set; } = null!;
     }
 }
