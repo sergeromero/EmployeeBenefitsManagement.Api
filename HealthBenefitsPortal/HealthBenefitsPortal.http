@@ -44,3 +44,6 @@ Content-Type: application/json
   "description" : "Aimed at people with families.",
   "benefitTypeId" : "1"
 }
+
+###
+GET {{rootURL}}/api/benefitplans/
