@@ -14,7 +14,7 @@ namespace Benefits.Application.Features.Employees.Queries.SearchEmployees
         private bool HaveAtLeastOneFilter(SearchEmployeesQuery query)
         {
             return !string.IsNullOrWhiteSpace(query.Name)
-                || (query.EmployeeNumber.HasValue)
+                || (!string.IsNullOrWhiteSpace(query.EmployeeNumber))
                 || query.DepartmentId.HasValue;
         }
     }

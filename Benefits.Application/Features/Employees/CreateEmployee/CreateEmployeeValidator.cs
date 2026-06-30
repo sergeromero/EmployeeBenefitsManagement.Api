@@ -23,6 +23,9 @@ namespace Benefits.Application.Features.Employees.CreateEmployee
                 .NotEmpty()
                 .EmailAddress();
 
+            RuleFor(x => x.HireDate)
+                .NotEmpty();
+
             RuleFor(x => x.DepartmentId)
                 .GreaterThan(0);
         }

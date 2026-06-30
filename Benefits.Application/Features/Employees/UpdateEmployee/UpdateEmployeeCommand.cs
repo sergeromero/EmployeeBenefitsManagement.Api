@@ -4,11 +4,11 @@ namespace Benefits.Application.Features.Employees.UpdateEmployee
 {
     public sealed record UpdateEmployeeCommand(
         int Id,
-        int EmployeeNumber,
+        string EmployeeNumber,
         string FirstName,
         string LastName,
         string Email,
-        DateTime HireDate,
+        DateOnly HireDate,
         int DepartmentId) : IRequest
     {
     }

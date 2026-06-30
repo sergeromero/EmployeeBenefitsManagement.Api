@@ -1,6 +1,6 @@
 ﻿namespace Benefits.Domain
 {
-    public class BenefitType : Entity
+    public sealed class EnrollmentCategory : Entity
     {
         public string Name { get; set; } = null!;
         public IReadOnlyCollection<BenefitPlan> BenefitPlans { get; set; } = [];

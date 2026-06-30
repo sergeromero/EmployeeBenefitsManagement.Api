@@ -1,5 +1,5 @@
 ﻿using Benefits.Application.Infrastructure.Contracts;
-using Benefits.Infrastructure.Persistance;
+using Benefits.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;

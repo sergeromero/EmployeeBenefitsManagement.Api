@@ -5,7 +5,7 @@ namespace Benefits.Application.Features.Employees.Queries.SearchEmployees
 {
     public sealed record SearchEmployeesQuery(
         string? Name,
-        int? EmployeeNumber,
+        string? EmployeeNumber,
         int? DepartmentId,
         int Page = 1,
         int PageSize = 10)

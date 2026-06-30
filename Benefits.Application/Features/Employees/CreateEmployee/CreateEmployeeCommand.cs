@@ -7,5 +7,6 @@ namespace Benefits.Application.Features.Employees.CreateEmployee
         string FirstName,
         string LastName,
         string Email,
+        DateOnly HireDate,
         int DepartmentId) : IRequest<int>;
 }

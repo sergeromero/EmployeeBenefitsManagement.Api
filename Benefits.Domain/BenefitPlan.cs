@@ -7,6 +7,9 @@
         public bool IsActive { get; set; } = true;
         public int BenefitTypeId { get; set; }
         public BenefitType BenefitType { get; set; } = null!;
+        public int EnrollmentCategoryId { get; set; }
+        public EnrollmentCategory EnrollmentCategory { get; set; } = null!;
+        public IReadOnlyCollection<EmployeeEnrollment> Enrollments { get; set; } = [];
 
         public void Deactivate()
         {

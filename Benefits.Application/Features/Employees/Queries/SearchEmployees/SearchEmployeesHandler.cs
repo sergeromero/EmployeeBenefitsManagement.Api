@@ -1,7 +1,7 @@
 ﻿using Benefits.Application.Features.Employees.Common;
 using Benefits.Application.Infrastructure.Contracts;
 using Benefits.Common;
-using Domain;
+using Benefits.Domain;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +29,7 @@ namespace Benefits.Application.Features.Employees.Queries.SearchEmployees
                     e.LastName.Contains(searchTerm));
             }
 
-            if (request.EmployeeNumber.HasValue)
+            if (!string.IsNullOrWhiteSpace(request.EmployeeNumber))
             {
                 query = query.Where(e => e.EmployeeNumber == request.EmployeeNumber);
             }

@@ -1,6 +1,6 @@
 ﻿using Benefits.Application.Infrastructure.Contracts;
 using Benefits.Common;
-using Domain;
+using Benefits.Domain;
 using MediatR;
 
 namespace Benefits.Application.Features.Employees.CreateEmployee
@@ -18,10 +18,11 @@ namespace Benefits.Application.Features.Employees.CreateEmployee
         {
             var employee = new Employee
             {
-                EmployeeNumber = int.Parse(request.EmployeeNumber),
+                EmployeeNumber = request.EmployeeNumber,
                 FirstName = request.FirstName,
                 LastName = request.LastName,
                 Email = request.Email,
+                HireDate = request.HireDate,
                 DepartmentId = request.DepartmentId 
             };
 
