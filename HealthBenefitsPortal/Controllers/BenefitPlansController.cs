@@ -1,4 +1,5 @@
 ﻿using Benefits.Application.Features.BenefitPlans.CreateBenefitPlans;
+using Benefits.Application.Features.BenefitPlans.DeleteBenefitPlan;
 using Benefits.Application.Features.BenefitPlans.Queries.GetBenefitPlans;
 using Benefits.Common;
 using MediatR;
@@ -37,6 +38,15 @@ namespace HealthBenefitsPortal.Controllers
             var benefits = await _mediator.Send(new GetBenefitPlansQuery(), cancellationToken);
 
             return Ok(benefits);
+        }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var command = new DeleteBenefitPlanCommand(id);
+
+            await _mediator.Send(command);
+            return NoContent();
         }
     }
 }

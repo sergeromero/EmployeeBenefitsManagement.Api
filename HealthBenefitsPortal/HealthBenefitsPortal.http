@@ -51,3 +51,6 @@ Content-Type: application/json
 
 ###
 GET {{rootURL}}/api/benefitplans/
+
+###
+DELETE {{rootURL}}/api/benefitplans/2

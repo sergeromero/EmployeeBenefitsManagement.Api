@@ -7,5 +7,10 @@
         public bool IsActive { get; set; } = true;
         public int BenefitTypeId { get; set; }
         public BenefitType BenefitType { get; set; } = null!;
+
+        public void Deactivate()
+        {
+            this.IsActive = false;
+        }
     }
 }
