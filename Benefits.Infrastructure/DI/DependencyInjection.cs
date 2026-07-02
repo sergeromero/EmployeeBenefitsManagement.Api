@@ -21,6 +21,7 @@ namespace Benefits.Infrastructure.DI
                 .WithScopedLifetime());
 
             services.AddScoped<IBenefitsDbContext, BenefitsDbContext>();
+            services.AddSingleton(TimeProvider.System);
 
             return services;
         }

@@ -11,6 +11,7 @@ Content-Type: application/json
   "firstName" : "Serge",
   "lastName" : "Romero",
   "eMail" : "serge@mydomain.com",
+  "hireDate" : "2015-03-25",
   "departmentId" : "1"
 }
 
@@ -54,3 +55,12 @@ GET {{rootURL}}/api/benefitplans/
 
 ###
 DELETE {{rootURL}}/api/benefitplans/2
+
+###
+POST {{rootURL}}/api/enrollments/
+Content-Type: application/json
+{
+  "employeeId" : "1",
+  "benefitPlanId" : "1",
+  "enrollmentDate" : "2026-07-25"
+}
