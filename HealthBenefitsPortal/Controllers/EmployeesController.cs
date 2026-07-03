@@ -3,6 +3,7 @@ using Benefits.Application.Features.Employees.CreateEmployee;
 using Benefits.Application.Features.Employees.DeleteEmployee;
 using Benefits.Application.Features.Employees.Queries.GetEmployeeById;
 using Benefits.Application.Features.Employees.Queries.SearchEmployees;
+using Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits;
 using Benefits.Application.Features.Employees.UpdateEmployee;
 using Benefits.Common;
 using MediatR;
@@ -76,6 +77,14 @@ namespace HealthBenefitsPortal.Controllers
 
             await _mediator.Send(command);
             return NoContent();
+        }
+
+        [HttpGet("{id:int}/benefits")]
+        public async Task<ActionResult<EmployeeBenefitsDto>> GetEmployeeBenefits(int id, CancellationToken cancellationToken)
+        {
+            var employeeEnrollments = await _mediator.Send(new GetEmployeeBenefitsQuery(id), cancellationToken);
+
+            return Ok(employeeEnrollments);
         }
     }
 }

@@ -64,3 +64,6 @@ Content-Type: application/json
   "benefitPlanId" : "1",
   "enrollmentDate" : "2026-07-25"
 }
+
+###
+GET {{rootURL}}/api/employees/1/benefits
