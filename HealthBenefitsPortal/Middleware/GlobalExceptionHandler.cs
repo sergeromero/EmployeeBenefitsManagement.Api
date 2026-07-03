@@ -1,4 +1,5 @@
 ﻿using Benefits.Application.Exceptions;
+using Benefits.Application.Exceptions.BusinessRuleViolationException;
 using Benefits.Common;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;

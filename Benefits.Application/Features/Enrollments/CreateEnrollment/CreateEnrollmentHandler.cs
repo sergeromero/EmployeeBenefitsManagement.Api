@@ -1,4 +1,5 @@
 ﻿using Benefits.Application.Exceptions;
+using Benefits.Application.Exceptions.BusinessRuleViolationException;
 using Benefits.Application.Infrastructure.Contracts;
 using Benefits.Common;
 using Benefits.Domain;
