@@ -40,7 +40,6 @@ namespace HealthBenefitsPortal.Controllers
         [HttpPost("terminate")]
         public async Task<ActionResult> Terminate(TerminateEnrollmentCommand command, CancellationToken cancellationToken)
         {
-            //var command = new TerminateEnrollmentCommand(employeeId, benefitPlanId, endDate);
             await _mediator.Send(command, cancellationToken);
 
             return NoContent();
