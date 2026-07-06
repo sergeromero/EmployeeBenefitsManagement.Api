@@ -13,7 +13,6 @@ namespace Benefits.Application.Features.Enrollments.CreateEnrollment
                 .GreaterThan(0);
 
             RuleFor(x => x.EnrollmentDate)
-                .Must(x => x != default)
                 .NotEmpty();
         }
     }

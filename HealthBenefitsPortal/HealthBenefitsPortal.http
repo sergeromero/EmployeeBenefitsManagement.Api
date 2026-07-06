@@ -67,3 +67,12 @@ Content-Type: application/json
 
 ###
 GET {{rootURL}}/api/employees/1/benefits
+
+###
+POST {{rootURL}}/api/enrollments/terminate
+Content-Type: application/json
+{
+  "employeeId" : "1",
+  "benefitPlanId" : "1",
+  "endDate" : "2025-08-01"
+}

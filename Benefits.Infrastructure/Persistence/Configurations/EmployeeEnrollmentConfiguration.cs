@@ -13,6 +13,12 @@ namespace Benefits.Infrastructure.Persistence.Configurations
                 x.EmployeeId,
                 x.BenefitPlanId
             });
+
+            builder.Property(x => x.EndDate)
+                .HasColumnType("date")
+                .IsRequired(false);
+
+            builder.Ignore(x => x.IsActive);
         }
     }
 }

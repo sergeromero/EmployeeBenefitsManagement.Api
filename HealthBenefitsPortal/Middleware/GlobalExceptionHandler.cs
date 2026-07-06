@@ -31,6 +31,18 @@ namespace HealthBenefitsPortal.Middleware
         {
             var result = exception switch
             {
+                EnrollmentAlreadyTerminatedException ex => new ProblemDetails
+                {
+                    Status = StatusCodes.Status409Conflict,
+                    Title = "Enrollment Already Terminated",
+                    Detail = ex.Message
+                },
+                InvalidEnrollmentDateException ex => new ProblemDetails
+                {
+                    Status = StatusCodes.Status400BadRequest,
+                    Title = "Invalid Enrollment End Date",
+                    Detail = ex.Message
+                },
                 NotFoundException ex => new ProblemDetails
                 {
                     Status = StatusCodes.Status404NotFound,

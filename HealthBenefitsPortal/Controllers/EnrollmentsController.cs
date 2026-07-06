@@ -1,4 +1,5 @@
 ﻿using Benefits.Application.Features.Enrollments.CreateEnrollment;
+using Benefits.Application.Features.Enrollments.TerminateEnrollment;
 using Benefits.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -34,6 +35,15 @@ namespace HealthBenefitsPortal.Controllers
         public Task<ActionResult> GetEnrollment(int employeeId, int benefitPlanId)
         {
             throw new NotImplementedException();
+        }
+
+        [HttpPost("terminate")]
+        public async Task<ActionResult> Terminate(TerminateEnrollmentCommand command, CancellationToken cancellationToken)
+        {
+            //var command = new TerminateEnrollmentCommand(employeeId, benefitPlanId, endDate);
+            await _mediator.Send(command, cancellationToken);
+
+            return NoContent();
         }
     }
 }
