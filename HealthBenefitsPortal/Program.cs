@@ -1,4 +1,5 @@
 using Benefits.Application.DI;
+using Benefits.Infrastructure.Configuration;
 using Benefits.Infrastructure.DI;
 using HealthBenefitsPortal.Middleware;
 
@@ -28,6 +29,8 @@ app.UseExceptionHandler();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+await app.InitializeInfrastructureAsync();
 
 app.MapControllers();
 
