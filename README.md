@@ -152,6 +152,11 @@ Identity:DefaultAdministrator:Email
 Identity:DefaultAdministrator:Password
 ```
 
+Configure the authentication user Secrets
+```bash
+dotnet user-secrets set "Jwt:Key" "your-very-long-secret-key-32+chars"
+```
+
 ### 3. Configure the database connection
 
 Update the `DefaultConnection` connection string in `appsettings.Development.json`.
@@ -177,6 +182,22 @@ dotnet run
 ```
 
 On startup the application will seed the required Identity roles and the default administrator account.
+
+### 6. Using the API (Authentication Required)
+
+All employee-related endpoints are protected using authentication and require a valid authenticated user.
+
+Authentication Model
+The application uses ASP.NET Core Identity for user management and authentication.
+
+At this stage of the project:
+
+Authentication is handled via Identity (cookie-based)
+A default administrator user is seeded at startup (see Configure User Secrets)
+JWT-based authentication is planned but not yet implemented
+
+Use the included HealthBenefitsPortal.http file to test the endpoints
+
 
 ---
 

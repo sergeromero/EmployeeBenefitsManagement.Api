@@ -7,10 +7,12 @@ using Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits;
 using Benefits.Application.Features.Employees.UpdateEmployee;
 using Benefits.Common;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthBenefitsPortal.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/employees")]
     public class EmployeesController : ControllerBase

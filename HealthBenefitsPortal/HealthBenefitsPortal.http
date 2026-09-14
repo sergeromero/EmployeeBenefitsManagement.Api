@@ -1,10 +1,25 @@
-@rootURL = http://localhost:5109
+@rootURL = https://localhost:7129
+
 
 GET {{rootURL}}/weatherforecast/
 Accept: application/json
 
 ###
+# @name login
+POST {{rootURL}}/api/auth/login
+Content-Type: application/json
+{
+  "email": "admin@benefits.local",
+  "password": "Admin123!"
+}
+
+###
+GET {{rootURL}}/api/employees?name=serge
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
 POST {{rootURL}}/api/employees/
+Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
 {
   "employeeNumber" : "11111111",
@@ -17,6 +32,7 @@ Content-Type: application/json
 
 ###
 PUT {{rootURL}}/api/employees/1
+Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json
 {
   "employeeNumber" : "22222222",
@@ -29,6 +45,7 @@ Content-Type: application/json
 
 ###
 DELETE {{rootURL}}/api/employees/1
+Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###
 POST {{rootURL}}/api/benefittypes/

@@ -28,6 +28,7 @@ app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 await app.InitializeInfrastructureAsync();
