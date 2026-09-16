@@ -217,11 +217,12 @@ while logged in as an administrator:
 2. Run the end point "https://localhost:7129/api/users/assign-role" with each user Id to 
    assign the roles as follows:
 
-User					Role
-hr1@test.com			HR
-hr2@test.com			HR
-employee1@test.com		Employee
-employee2@test.com		Employee
+| User | Role |
+| ---- | ---- |
+| hr1@test.com | HR |
+| hr2@test.com | HR |
+| employee1@test.com | Employee |
+| employee2@test.com | Employee |
 
 
 ---
