@@ -14,6 +14,19 @@ Content-Type: application/json
 }
 
 ###
+GET {{rootURL}}/api/users/
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+POST {{rootURL}}/api/users/assign-role
+Authorization: Bearer {{login.response.body.$.accessToken}}
+Content-Type: application/json
+{
+  "userId": "",
+  "role": ""
+}
+
+###
 GET {{rootURL}}/api/employees?name=serge
 Authorization: Bearer {{login.response.body.$.accessToken}}
 

@@ -116,11 +116,22 @@ The following roles are created if they do not already exist:
 * HR
 * Employee
 
+The following users are created if they do not already exist (only in Development mode):
+
+* hr1@test.com
+* hr2@test.com
+* employee1@test.com
+* employee2@test.com
+
+These users all have the same password: Password123!
+
 A default administrator account is also created using credentials stored in User Secrets.
 
 The seeding process is idempotent, allowing the application to start multiple times without creating duplicate roles or users.
 
 ---
+
+## 
 
 ## Getting Started
 
@@ -181,7 +192,8 @@ Start the API using Visual Studio or:
 dotnet run
 ```
 
-On startup the application will seed the required Identity roles and the default administrator account.
+On startup the application will seed the required Identity roles, the default administrator account
+and, if running in Development mode, some test users.
 
 ### 6. Using the API (Authentication Required)
 
@@ -197,6 +209,19 @@ A default administrator user is seeded at startup (see Configure User Secrets)
 JWT-based authentication is planned but not yet implemented
 
 Use the included HealthBenefitsPortal.http file to test the endpoints
+
+Test users are also created during project startup. To test the application with these users follow this steps
+while logged in as an administrator:
+
+1. Run the end point "https://localhost:7129/api/users" to get the users' Ids.
+2. Run the end point "https://localhost:7129/api/users/assign-role" with each user Id to 
+   assign the roles as follows:
+
+User					Role
+hr1@test.com			HR
+hr2@test.com			HR
+employee1@test.com		Employee
+employee2@test.com		Employee
 
 
 ---

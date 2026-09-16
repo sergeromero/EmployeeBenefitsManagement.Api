@@ -6,6 +6,7 @@ using Benefits.Application.Features.Employees.Queries.SearchEmployees;
 using Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits;
 using Benefits.Application.Features.Employees.UpdateEmployee;
 using Benefits.Common;
+using Benefits.Domain.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +25,7 @@ namespace HealthBenefitsPortal.Controllers
             _mediator = Guard.NotNull(mediator);
         }
 
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
         [HttpPost]
         public async Task<ActionResult<int>> Create(CreateEmployeeCommand command)
         {
@@ -32,6 +34,7 @@ namespace HealthBenefitsPortal.Controllers
             return CreatedAtAction(nameof(GetById), new { id = employeeId }, employeeId);
         }
 
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR},{Roles.Employee}")]
         [HttpGet("{id:int}")]
         public async Task<ActionResult<EmployeeBasicInfoDto>> GetById(int id)
         {
@@ -45,6 +48,7 @@ namespace HealthBenefitsPortal.Controllers
             return Ok(employee);
         }
 
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR},{Roles.Employee}")]
         [HttpGet]
         public async Task<ActionResult<List<EmployeeBasicInfoDto>>> Search([FromQuery] SearchEmployeesQuery query, CancellationToken cancellationToken)
         {
@@ -53,6 +57,7 @@ namespace HealthBenefitsPortal.Controllers
             return Ok(employees);
         }
 
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
         [HttpPut("{id:int}")]
         public async Task<ActionResult> UpdateEmployee(int id, UpdateEmployeeDto dto)
         {
@@ -72,6 +77,7 @@ namespace HealthBenefitsPortal.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> DeleteEmployee(int id)
         {
@@ -81,6 +87,7 @@ namespace HealthBenefitsPortal.Controllers
             return NoContent();
         }
 
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR},{Roles.Employee}")]
         [HttpGet("{id:int}/benefits")]
         public async Task<ActionResult<EmployeeBenefitsDto>> GetEmployeeBenefits(int id, CancellationToken cancellationToken)
         {

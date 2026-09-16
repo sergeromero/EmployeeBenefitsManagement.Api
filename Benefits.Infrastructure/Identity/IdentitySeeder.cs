@@ -1,4 +1,6 @@
 ﻿using Benefits.Common;
+using Benefits.Domain.Constants;
+using Benefits.Infrastructure.Configuration;
 using Benefits.Infrastructure.Configuration.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
@@ -11,16 +13,19 @@ namespace Benefits.Infrastructure.Identity
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IOptions<DefaultAdministratorOptions> _defaultAdministrator;
+        private readonly IOptions<SeedOptions> _seedOptions;
         private readonly ILogger<IdentitySeeder> _logger;
 
         public IdentitySeeder(UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<DefaultAdministratorOptions> administratorOptions,
+            IOptions<SeedOptions> seedOptions,
             ILogger<IdentitySeeder> logger)
         {
             _userManager = Guard.NotNull(userManager);
             _roleManager = Guard.NotNull(roleManager);
             _defaultAdministrator = Guard.NotNull(administratorOptions);
+            _seedOptions = Guard.NotNull(seedOptions);
             _logger = Guard.NotNull(logger);
         }
 
@@ -30,13 +35,14 @@ namespace Benefits.Infrastructure.Identity
 
             await InitializeRolesAsync();
             await InitializeAdministratorAsync();
+            await InitializeTestUsers();
 
             _logger.LogInformation("ASP.NET Identity initialization completed.");
         }
 
         private async Task InitializeRolesAsync()
         {
-            foreach(var roleName in IdentityRoles.All)
+            foreach(var roleName in Roles.All)
             {
                 if(await _roleManager.RoleExistsAsync(roleName))
                 {
@@ -70,14 +76,44 @@ namespace Benefits.Infrastructure.Identity
                 ThrowIfFailed(result);
             }
 
-            if(!await _userManager.IsInRoleAsync(administrator, IdentityRoles.Administrator))
+            if(!await _userManager.IsInRoleAsync(administrator, Roles.Administrator))
             {
-                _logger.LogInformation("Assigning role '{RoleName}' to the default administrator.", IdentityRoles.Administrator);
+                _logger.LogInformation("Assigning role '{RoleName}' to the default administrator.", Roles.Administrator);
 
-                var addToRoleResult = await _userManager.AddToRoleAsync(administrator, IdentityRoles.Administrator);
+                var addToRoleResult = await _userManager.AddToRoleAsync(administrator, Roles.Administrator);
 
                 ThrowIfFailed(addToRoleResult);
             }
+        }
+        private async Task InitializeTestUsers()
+        {
+            if (_seedOptions.Value.IncludeTestUsers)
+            {
+                await EnsureUserAsync("hr1@test.com", "Password123!");
+                await EnsureUserAsync("hr2@test.com", "Password123!");
+                await EnsureUserAsync("employee1@test.com", "Password123!");
+                await EnsureUserAsync("employee2@test.com", "Password123!");
+            }
+        }
+
+        private async Task EnsureUserAsync(string email, string password)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+
+            if(existingUser != null)
+            {
+                return;
+            }
+
+            var user = new ApplicationUser
+            {
+                UserName = email,
+                Email = email,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, password);
+            ThrowIfFailed(result);
         }
 
         private void ThrowIfFailed(IdentityResult result)

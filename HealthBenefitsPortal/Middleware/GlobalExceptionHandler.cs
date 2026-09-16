@@ -55,6 +55,12 @@ namespace HealthBenefitsPortal.Middleware
                     Title = "Business Rule Violation",
                     Detail = ex.Message
                 },
+                IdentityOperationException ex => new ProblemDetails
+                {
+                    Status = StatusCodes.Status500InternalServerError,
+                    Title = "Internal Server Error",
+                    Detail = ex.Message
+                },
                 FluentValidation.ValidationException ex => CreateValidationProblemDetails(ex),
                 _ => new ProblemDetails
                 {

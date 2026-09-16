@@ -1,6 +1,6 @@
-﻿namespace Benefits.Infrastructure.Identity
+﻿namespace Benefits.Domain.Constants
 {
-    public static class IdentityRoles
+    public static class Roles
     {
         public const string Administrator = "Administrator";
         public const string HR = "HR";
@@ -13,3 +13,4 @@
         ];
     }
 }
+

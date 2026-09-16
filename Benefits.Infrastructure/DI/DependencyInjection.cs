@@ -1,6 +1,7 @@
 ﻿using Benefits.Application.Authentication.Interfaces;
 using Benefits.Application.Infrastructure.Contracts;
 using Benefits.Infrastructure.Authentication;
+using Benefits.Infrastructure.Configuration;
 using Benefits.Infrastructure.Configuration.Identity;
 using Benefits.Infrastructure.Identity;
 using Benefits.Infrastructure.Persistence;
@@ -9,7 +10,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Scrutor;
 using System.Text;
@@ -20,6 +20,8 @@ namespace Benefits.Infrastructure.DI
     {
         public static IServiceCollection RegisterInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            services.Configure<SeedOptions>(configuration.GetSection("SeedOptions"));
+
             services.AddDbContext<BenefitsDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddOptions<DefaultAdministratorOptions>()
@@ -43,6 +45,8 @@ namespace Benefits.Infrastructure.DI
                 .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                 .AsImplementedInterfaces()
                 .WithScopedLifetime());
+
+            services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddScoped<IBenefitsDbContext, BenefitsDbContext>();
             services.AddSingleton(TimeProvider.System);

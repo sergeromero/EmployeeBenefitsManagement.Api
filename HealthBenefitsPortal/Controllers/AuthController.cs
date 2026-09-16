@@ -1,6 +1,7 @@
 ﻿using Benefits.Application.Authentication.DTOs;
 using Benefits.Application.Authentication.Interfaces;
 using Benefits.Common;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthBenefitsPortal.Controllers
@@ -11,7 +12,7 @@ namespace HealthBenefitsPortal.Controllers
     {
         private readonly IAuthenticationService _authenticationService;
 
-        public AuthController(IAuthenticationService authenticationService)
+        public AuthController(IAuthenticationService authenticationService, IMediator mediator)
         {
             _authenticationService = Guard.NotNull(authenticationService);
         }
