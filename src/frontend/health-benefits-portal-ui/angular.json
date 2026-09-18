@@ -36,11 +36,13 @@
             ],
             "stylePreprocessorOptions": {
               "includePaths": [
-                "src"
+                "src",
+                "src/styles"
               ]
             },
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "src/styles/styles.scss"
             ],
             "server": "src/main.server.ts",
             "outputMode": "server",
