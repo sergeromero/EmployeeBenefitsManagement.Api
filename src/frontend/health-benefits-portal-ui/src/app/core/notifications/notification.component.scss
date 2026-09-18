@@ -1,0 +1,17 @@
+    .notification-container {
+      position: fixed;
+      top: 1rem;
+      right: 1rem;
+    }
+
+    .notification {
+      background: #333;
+      color: white;
+      padding: 1rem;
+      margin-bottom: 0.5rem;
+      border-radius: 4px;
+    }
+
+    .notification.error {
+      background: #c62828;
+    }

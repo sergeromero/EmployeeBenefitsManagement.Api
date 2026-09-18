@@ -1,0 +1,8 @@
+<div class="notification-container">
+    @for(n of notifications(); track n){
+        <div class="notification" [class.error]="n.type === 'error'">
+            {{n.message}}
+        </div>
+    }
+</div>
+
