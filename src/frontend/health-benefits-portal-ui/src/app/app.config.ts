@@ -6,13 +6,14 @@ import { provideClientHydration } from '@angular/platform-browser';
 import { APP_CONFIG } from './core/config/app-config.token';
 import { httpErrorInterceptor } from './core/http/http-error.interceptor';
 import { GlobalErrorHandler } from './core/errors/global-error.handler';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes), 
     provideClientHydration(),
-    provideHttpClient(withInterceptors([httpErrorInterceptor])),
+    provideHttpClient(withInterceptors([authInterceptor, httpErrorInterceptor])),
     {
       provide: APP_CONFIG,
       useValue: {
