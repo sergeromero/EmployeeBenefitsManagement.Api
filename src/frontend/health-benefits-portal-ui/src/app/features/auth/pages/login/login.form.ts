@@ -14,7 +14,7 @@ export function createLoginForm(formBuilder: FormBuilder) {
             '',
             [
                 Validators.required,
-                Validators.minLength(5),
+                Validators.minLength(6),
                 Validators.maxLength(100)
             ]
         ]

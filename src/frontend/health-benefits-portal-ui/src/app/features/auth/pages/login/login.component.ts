@@ -1,5 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, ValidationErrors, AbstractControl } from '@angular/forms';
 import { AuthApiService } from '@core/api/auth/auth-api.service';
 import { createLoginForm } from './login.form';
 import { finalize } from 'rxjs';
@@ -52,5 +52,29 @@ export class AppLogin {
     }
 
     return "An unexpected error occurred.";
+  }
+
+  getMessages(errs: ValidationErrors | null, name: string): string[] {
+    let messages: string[] = [];
+    if (!errs) return messages;
+
+    for (let errorName in errs) {
+      switch (errorName) {
+        case "required":
+          messages.push(`The ${name} is required.`);
+          break;
+        case "minlength":
+          messages.push(`The ${name} must be at least ${errs['minlength'].requiredLength} characters.`);
+          break;
+        case "email":
+          messages.push(`Invalid email format.`);
+          break;
+      }
+    }
+    return messages;
+  }
+
+  getValidationMessages(control: AbstractControl, thingName: string) {
+    return this.getMessages(control.errors, thingName)
   }
 }

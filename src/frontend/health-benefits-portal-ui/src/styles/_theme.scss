@@ -3,3 +3,7 @@ body {
     color: var(--color-text-primary);
     font-family: var(--font-family);
 }
+
+input.ng-dirty.ng-invalid { border: 2px solid #ff0000 }
+input.ng-touched.ng-invalid { border: 2px solid #ff0000 }
+input.ng-dirty.ng-valid { border: 2px solid #6bc502 }
