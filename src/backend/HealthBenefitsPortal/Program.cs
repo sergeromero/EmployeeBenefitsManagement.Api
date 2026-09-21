@@ -13,6 +13,22 @@ builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
 builder.Services.AddControllers();
+
+var allowedOrigins = builder.Configuration
+    .GetSection("Cors:AllowedOrigins")
+    .Get<string[]>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("DefaultCorsPolicy",
+        policy =>
+        {
+            policy
+                .WithOrigins(allowedOrigins!)
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
@@ -28,6 +44,7 @@ app.UseExceptionHandler();
 
 app.UseHttpsRedirection();
 
+app.UseCors("DefaultCorsPolicy");
 app.UseAuthentication();
 app.UseAuthorization();
 
