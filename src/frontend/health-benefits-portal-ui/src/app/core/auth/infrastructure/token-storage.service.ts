@@ -27,10 +27,14 @@ export class TokenStorageService {
     }
 
     set(session: AuthenticatedUser): void {
-        localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+        if (this.isBrowser){
+            localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(session));
+        }        
     }
 
     clear(): void {
-        localStorage.removeItem(AUTH_STORAGE_KEY);
+        if (this.isBrowser) {
+            localStorage.removeItem(AUTH_STORAGE_KEY);
+        }        
     }
 }

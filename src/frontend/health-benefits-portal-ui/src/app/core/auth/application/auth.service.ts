@@ -1,6 +1,5 @@
-import { Injectable, computed, signal } from "@angular/core";
+import { Injectable, computed, signal, inject } from "@angular/core";
 import { TokenStorageService } from "../infrastructure/token-storage.service";
-//import { decodeJwt, extractRoles } from "../domain/utils/jwt.utils";
 import { AuthenticatedUser } from "../domain/models/authenticated-user.model";
 import { LoginResponse } from "@core/contracts/auth/login.response";
 
@@ -8,13 +7,14 @@ import { LoginResponse } from "@core/contracts/auth/login.response";
     providedIn: "root"
 })
 export class AuthService {
+    private readonly storage = inject(TokenStorageService);
     private readonly _user = signal<AuthenticatedUser | null>(null);
 
     readonly user = computed(() => this._user());
     readonly token = computed(() => this._user()?.accessToken ?? null);
     readonly roles = computed(() => this._user()?.roles ?? []);
 
-    constructor(private readonly storage: TokenStorageService) {
+    constructor() {
         this.restoreFromStorage();
     }
 
