@@ -1,4 +1,5 @@
 import { Injectable, computed, signal, inject } from "@angular/core";
+import { Router } from "@angular/router";
 import { TokenStorageService } from "../infrastructure/token-storage.service";
 import { AuthenticatedUser } from "../domain/models/authenticated-user.model";
 import { LoginResponse } from "@core/contracts/auth/login.response";
@@ -7,6 +8,7 @@ import { LoginResponse } from "@core/contracts/auth/login.response";
     providedIn: "root"
 })
 export class AuthService {
+    private readonly router = inject(Router);
     private readonly storage = inject(TokenStorageService);
     private readonly _user = signal<AuthenticatedUser | null>(null);
 
@@ -62,5 +64,10 @@ export class AuthService {
         }
 
         this._user.set(storedUser);
+    }
+
+    logout(): void {
+        this.clear();
+        this.router.navigate(['/login']);
     }
 }
