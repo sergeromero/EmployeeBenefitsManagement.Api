@@ -3,6 +3,7 @@ import { ReactiveFormsModule, FormBuilder, ValidationErrors, AbstractControl } f
 import { AuthApiService } from '@core/api/auth/auth-api.service';
 import { createLoginForm } from './login.form';
 import { finalize } from 'rxjs';
+import { AuthService } from '@core/auth/application/auth.service';
 
 @Component({
   standalone: true,
@@ -14,6 +15,7 @@ import { finalize } from 'rxjs';
 export class AppLogin {
   private readonly formBuilder = inject(FormBuilder);
   private readonly authApi = inject(AuthApiService);
+  private readonly authService = inject(AuthService);
 
   readonly form = createLoginForm(this.formBuilder);
 
@@ -33,8 +35,7 @@ export class AppLogin {
       .pipe(finalize(() => this.loading.set(false)))
       .subscribe({
         next: (response) => {
-          console.log('JWT:', response.accessToken);
-          //Storage on story 2.2
+          this.authService.setSession(response, true);
         },
         error: (err) => {
           this.errorMessage.set(this.extractError(err));
