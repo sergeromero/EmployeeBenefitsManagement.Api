@@ -1,0 +1,13 @@
+<ng-container>
+    @switch (view()) {
+        @case ("home") {
+            <app-home></app-home>
+        }
+        @case ("admin") {
+            <app-admin></app-admin>
+        }
+        @case ("employee") {
+            <app-employee></app-employee>
+        }
+    }
+</ng-container>

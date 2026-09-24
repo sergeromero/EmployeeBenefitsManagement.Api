@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, ValidationErrors, AbstractControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthApiService } from '@core/api/auth/auth-api.service';
 import { createLoginForm } from './login.form';
 import { finalize } from 'rxjs';
@@ -15,6 +16,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
   templateUrl: './login.component.html',
 })
 export class AppLogin {
+  private readonly router = inject(Router);
   private readonly formBuilder = inject(FormBuilder);
   private readonly authApi = inject(AuthApiService);
   private readonly authService = inject(AuthService);
@@ -38,6 +40,7 @@ export class AppLogin {
       .subscribe({
         next: (response) => {
           this.authService.setSession(response, true);
+          this.router.navigateByUrl("/");
         },
         error: (err) => {
           this.errorMessage.set(this.extractError(err));

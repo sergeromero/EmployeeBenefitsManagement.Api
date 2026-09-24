@@ -1,11 +1,10 @@
 import { Component, signal } from '@angular/core';
 import { AppNotification } from './core/notifications/notification.component';
 import { RouterOutlet } from '@angular/router';
-import { AppMainLayout } from './layout/main-layout/main-layout.component';
 
 @Component({
   standalone: true,
-  imports: [RouterOutlet, AppNotification, AppMainLayout],
+  imports: [RouterOutlet, AppNotification],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',

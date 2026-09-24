@@ -1,0 +1,12 @@
+<div class="landing-container">
+    <h1>Employee Dashboard</h1>
+    <div class="actions-grid">
+        @for (action of actions(); track action) {
+            <div class="action-card">
+                <h3>{{action.label}}</h3>
+                <p>{{action.description}}</p>
+                <a [routerLink]="action.route">Go</a>
+            </div>
+        }
+    </div>
+</div>
