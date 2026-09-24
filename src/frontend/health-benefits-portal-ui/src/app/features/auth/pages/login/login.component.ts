@@ -4,10 +4,12 @@ import { AuthApiService } from '@core/api/auth/auth-api.service';
 import { createLoginForm } from './login.form';
 import { finalize } from 'rxjs';
 import { AuthService } from '@core/auth/application/auth.service';
+import { MatAnchor, MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
 
 @Component({
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, MatAnchor, MatButtonModule, MatProgressSpinnerModule],
   selector: 'app-login',
   styleUrl: './login.component.scss',
   templateUrl: './login.component.html',

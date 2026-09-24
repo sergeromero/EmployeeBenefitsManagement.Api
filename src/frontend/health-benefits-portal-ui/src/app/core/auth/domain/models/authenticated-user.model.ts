@@ -4,4 +4,6 @@ export interface AuthenticatedUser {
     roles: string[];
     accessToken: string;
     expiresAt: number;
+    firstName: string;
+    lastName: string;
 }

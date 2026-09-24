@@ -1,14 +1,13 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, output } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
   imports: [NgClass],
   selector: 'app-button',
-  styleUrl: './button.component.scss',
+  styleUrls: ['./button.component.scss'],
   templateUrl: './button.component.html',
 })
 export class AppButton {
-  label = input<string>('');
   variant = input<'primary' | 'secondary' | 'outline'>('primary');
   disabled = input<boolean>(false);
 
@@ -19,4 +18,12 @@ export class AppButton {
     'btn-outline': this.variant() === 'outline',
     'btn-disabled': this.disabled()
   }));
+
+  clicked = output<void>();
+
+  onClick(): void {
+    if (!this.disabled()) {
+      this.clicked.emit();
+    }
+  }
 }

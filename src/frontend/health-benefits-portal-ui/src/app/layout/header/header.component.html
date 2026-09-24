@@ -1,3 +1,24 @@
-<header>
-    <button (click)="logout()">Logout</button>
+<header class="header">
+    <div class="container">
+        <div class="logo">
+            <img src="assets/logo.png" alt="Health Benefits Portal" />
+            <span class="title">Health Benefits Portal</span>
+        </div>
+
+        <div class="actions">
+            @if (!isLoggedIn() && !isLoginPage()) {
+                <button mat-raised-button color="primary" (click)="login()">
+                    Login
+                </button>
+            }
+            @if (isLoggedIn() && !isLoginPage()) {
+                <span class="user">
+                    Welcome {{userName()}}
+                </span>
+                <button mat-raised-button color="secondary" (click)="logout()">
+                    Logout
+                </button>
+            }
+        </div>
+    </div>
 </header>

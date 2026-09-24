@@ -1,5 +1,6 @@
-<button
+<button type="button"
     [ngClass]="classes()"
-    [disabled]="disabled()">
-    {{ label() }}    
+    [disabled]="disabled()"
+    (click)="onClick()">
+    <ng-content></ng-content>
 </button>

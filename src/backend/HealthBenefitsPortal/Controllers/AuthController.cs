@@ -1,5 +1,4 @@
-﻿using Benefits.Application.Authentication.DTOs;
-using Benefits.Application.Authentication.Interfaces;
+﻿using Benefits.Application.Features.Authentication;
 using Benefits.Common;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -10,17 +9,17 @@ namespace HealthBenefitsPortal.Controllers
     [Route("api/[controller]")]
     public sealed class AuthController : ControllerBase
     {
-        private readonly IAuthenticationService _authenticationService;
+        private readonly IMediator _mediator;
 
-        public AuthController(IAuthenticationService authenticationService, IMediator mediator)
+        public AuthController(IMediator mediator)
         {
-            _authenticationService = Guard.NotNull(authenticationService);
+            _mediator = Guard.NotNull(mediator);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> Login([FromBody] LoginCommand command, CancellationToken cancellationToken)
         {
-            var result = await _authenticationService.AuthenticateAsync(request, cancellationToken);
+            var result = await _mediator.Send(command, cancellationToken);
 
             if(result is null)
             {

@@ -1,0 +1,64 @@
+.header {
+  height: 64px;
+  background: #1f2937;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #374151;
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  img {
+    height: 36px;
+    width: 36px;
+  }
+}
+
+.title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.user {
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+.logo .title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1f2937;
+}

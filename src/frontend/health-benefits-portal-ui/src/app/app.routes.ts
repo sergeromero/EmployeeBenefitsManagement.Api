@@ -1,13 +1,31 @@
 import { Routes } from '@angular/router';
+import { AppAuthLayout } from './layout/auth-layout/auth-layout.component';
+import { AppMainLayout } from './layout/main-layout/main-layout.component';
 
 export const routes: Routes = [
     {
-         path: 'login',
-         loadComponent: () => import("./features/auth/pages/login/login.component").then(m => m.AppLogin)
+        path: '',
+        component: AppMainLayout,
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./features/pages/home/home.component').then(m => m.HomeComponent)
+            }
+        ]
     },
     {
-        path: 'unauthorized',
-        loadComponent: () => import("./features/shared/unauthorized/unauthorized.component").then(m => m.Unauthorized)
+         path: 'login',
+         component: AppAuthLayout,
+         children: [
+            {
+                path: '',
+                loadComponent: () => import("./features/auth/pages/login/login.component").then(m => m.AppLogin)
+            }
+         ]
+    },
+    {
+        path: '**',
+        redirectTo: ''
     }
 ];
 

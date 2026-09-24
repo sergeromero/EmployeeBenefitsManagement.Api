@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
+import { AppHeader } from '../header/header.component';
 import { RouterOutlet } from '@angular/router';
-import { Header } from '../header/header.component';
 
 @Component({
   standalone: true,
-  imports: [RouterOutlet, Header],
+  imports: [AppHeader, RouterOutlet],
   selector: 'app-main-layout',
   styleUrl: './main-layout.component.scss',
   templateUrl: './main-layout.component.html',
 })
-export class MainLayout {}
+export class AppMainLayout {}

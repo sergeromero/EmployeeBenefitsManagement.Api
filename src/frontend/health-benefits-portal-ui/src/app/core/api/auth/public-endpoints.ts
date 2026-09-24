@@ -3,8 +3,6 @@ import { inject } from "@angular/core";
 
 type EndpointMatcher = string | RegExp | ((url: string) => boolean);
 
-const appConfig = inject(APP_CONFIG);
-
 export const getPublicEndpoints = (): EndpointMatcher[] => {
   const appConfig = inject(APP_CONFIG);
   return [

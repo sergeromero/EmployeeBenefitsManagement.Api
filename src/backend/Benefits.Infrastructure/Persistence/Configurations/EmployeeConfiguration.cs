@@ -52,6 +52,9 @@ namespace Benefits.Infrastructure.Persistence.Configurations
                 .WithOne(ee => ee.Employee)
                 .HasForeignKey(ee => ee.EmployeeId)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Property(e => e.UserId)
+                .HasMaxLength(450);
         }
     }
 }

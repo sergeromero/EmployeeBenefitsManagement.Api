@@ -35,7 +35,9 @@ export class AuthService {
             email: response.user.email,
             roles: response.user.roles,
             accessToken: response.accessToken,
-            expiresAt
+            expiresAt,
+            firstName: response.user.firstName,
+            lastName: response.user.lastName
         };
 
         this._user.set(user);
