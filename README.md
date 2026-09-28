@@ -204,14 +204,20 @@ The application uses ASP.NET Core Identity for user management and authenticatio
 
 At this stage of the project:
 
-Authentication is handled via Identity (cookie-based)
+Authentication is handled via Identity.
 A default administrator user is seeded at startup (see Configure User Secrets)
-JWT-based authentication is planned but not yet implemented
 
-Use the included HealthBenefitsPortal.http file to test the endpoints
+With the applicatin running you can authenticate and get the token by running:
 
-Test users are also created during project startup. To test the application with these users follow this steps
-while logged in as an administrator:
+```bash
+curl https://localhost:7129/api/auth/login -H "Content-Type: application/json" -d "{\"email\": \"youradmin@something.com\", \"password\": \"your-password\"}
+```
+
+Alternatively you can use the included HealthBenefitsPortal.http file to authenticate and test the endpoints.
+
+Test users are also created during project startup, but they need to be configured before available to use. 
+To test the application with these users follow these steps with the received administrator token
+(the simplest way of doing it is with the HealthBenefitsPortal.http file included in the project):
 
 1. Run the end point "https://localhost:7129/api/users" to get the users' Ids.
 2. Run the end point "https://localhost:7129/api/users/assign-role" with each user Id to 
@@ -224,6 +230,18 @@ while logged in as an administrator:
 | employee1@test.com | Employee |
 | employee2@test.com | Employee |
 
+Optionally, by creating Employees and assigning them these users you will have additional functionality available in the application 
+i.e. seeing the name of the employee displayed in the Header after log in.
+
+1. Create an employee using the post endpoint "https://localhost:7129/api/employees"
+2. Assign the newly created employee one of the test users by opening the database with Microsoft SQL Server Management Studio and running
+the following SQL statement:
+
+```
+  UPDATE [HealthBenefits].[dbo].[Employees]
+  SET UserId = (SELECT Id FROM [HealthBenefits].[dbo].[IdentityUsers] AS iu WHERE iu.Email = 'test-user-emai')
+  WHERE Id = employee-Id
+```
 
 ---
 
