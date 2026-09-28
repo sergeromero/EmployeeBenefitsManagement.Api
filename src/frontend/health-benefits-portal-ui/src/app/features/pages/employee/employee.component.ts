@@ -12,11 +12,5 @@ import { LandingAction, UserRole } from '../shared/landing.model';
   templateUrl: './employee.component.html',
 })
 export class EmployeeComponent {
-  private authService = inject(AuthService);
-  private roles = computed<UserRole[]>(() => (this.authService.roles() ?? []) as UserRole[]);
-  
-  actions = computed<LandingAction[]>(() => 
-    LANDING_ACTIONS.filter(action => 
-      action.roles.some(role => this.roles().includes(role))
-    ));
+
 }

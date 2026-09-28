@@ -1,0 +1,9 @@
+<nav class="sidebar">
+    <ul>
+        @for (action of actions(); track action) {
+            <a [routerLink]="action.route" routerLinkActive="active">
+                {{action.label}}
+            </a>
+        }
+    </ul>
+</nav>

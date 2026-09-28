@@ -3,26 +3,42 @@ import { AppAuthLayout } from './layout/auth-layout/auth-layout.component';
 import { AppMainLayout } from './layout/main-layout/main-layout.component';
 import { authGuard } from '@core/guards/auth.guard';
 
-export const routes: Routes = [
-    //ROOT ENTRY
+export const routes: Routes = [    
+    //LOGIN
+    {
+        path: 'login',
+        component: AppAuthLayout,
+        children: [
+            {
+                path: '',
+                loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.AppLogin)
+            }
+        ]
+    },
+    //ROOT PUBLIC + AUTH-AWARE ROOT
     {
         path: '',
         component: AppMainLayout,
         children: [
             {
                 path: '',
+                pathMatch: "full",
                 loadComponent: () => import('./features/entry/entry.component').then(m => m.EntryComponent)
-            }
-        ]
-    },
-    //LOGIN
-    {
-        path: '',
-        component: AppAuthLayout,
-        children: [
+            },
+            //RESTRICTED - AUTHENTICATED USERS ONLY
             {
-                path: 'login',
-                loadComponent: () => import('./features/auth/pages/login/login.component').then(m => m.AppLogin)
+                path: 'employees',
+                canActivate: [authGuard],
+                loadComponent: () => import("./features/pages/employee/employee.component").then(m => m.EmployeeComponent),
+                data: { roles: ["Administrator", "HR"]}
+            },
+            {
+                path: "unauthorized",
+                loadComponent: () => import("./features/pages/unauthorized/unauthorized.component").then(m => m.Unauthorized),
+            },
+            {
+                path: '**',
+                loadComponent: () => import("./features/pages/not-found/not-found.component").then(m => m.NotFoundComponent)
             }
         ]
     },
@@ -49,10 +65,6 @@ export const routes: Routes = [
     //     }
     //     ]
     // },
-    {
-        path: '**',
-        redirectTo: ''
-    }
 ];
 
 

@@ -1,13 +1,5 @@
-<ng-container>
-    @switch (view()) {
-        @case ("home") {
-            <app-home></app-home>
-        }
-        @case ("admin") {
-            <app-admin></app-admin>
-        }
-        @case ("employee") {
-            <app-employee></app-employee>
-        }
-    }
-</ng-container>
+@if (!isAuthenticated()) {
+    <app-home></app-home>
+} @else {
+    <h2>Select an option from the menu</h2>
+}
