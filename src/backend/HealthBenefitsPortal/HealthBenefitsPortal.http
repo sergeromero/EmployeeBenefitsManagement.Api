@@ -1,10 +1,6 @@
 @rootURL = https://localhost:7129
 
 
-GET {{rootURL}}/weatherforecast/
-Accept: application/json
-
-###
 # @name login
 POST {{rootURL}}/api/auth/login
 Content-Type: application/json
