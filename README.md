@@ -217,7 +217,7 @@ Alternatively you can use the included HealthBenefitsPortal.http file to authent
 
 Test users are also created during project startup, but they need to be configured before available to use. 
 To test the application with these users follow these steps with the received administrator token
-(the simplest way of doing it is with the HealthBenefitsPortal.http file included in the project):
+__(the simplest way of doing it is with the HealthBenefitsPortal.http file included in the project)__:
 
 1. Run the end point "https://localhost:7129/api/users" to get the users' Ids.
 2. Run the end point "https://localhost:7129/api/users/assign-role" with each user Id to 
