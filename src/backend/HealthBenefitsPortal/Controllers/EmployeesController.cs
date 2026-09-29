@@ -1,5 +1,6 @@
 ﻿using Benefits.Application.Features.Employees.Common;
 using Benefits.Application.Features.Employees.CreateEmployee;
+using Benefits.Application.Features.Employees.CreateEmployeeWithUser;
 using Benefits.Application.Features.Employees.DeleteEmployee;
 using Benefits.Application.Features.Employees.Queries.GetEmployeeById;
 using Benefits.Application.Features.Employees.Queries.SearchEmployees;
@@ -7,6 +8,7 @@ using Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits;
 using Benefits.Application.Features.Employees.UpdateEmployee;
 using Benefits.Common;
 using Benefits.Domain.Constants;
+using HealthBenefitsPortal.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -94,6 +96,22 @@ namespace HealthBenefitsPortal.Controllers
             var employeeEnrollments = await _mediator.Send(new GetEmployeeBenefitsQuery(id), cancellationToken);
 
             return Ok(employeeEnrollments);
+        }
+
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPost("complete")]
+        public async Task<IActionResult> CreateEmployeeWithUser([FromBody] CreateEmployeeWithUserRequest request)
+        {
+            var command = new CreateEmployeeWithUserCommand
+            (
+                request.Employee,
+                request.User,
+                request.Role
+            );
+
+            var employeeId = await _mediator.Send(command);
+
+            return CreatedAtAction(nameof(GetById), new { id = employeeId }, employeeId);
         }
     }
 }

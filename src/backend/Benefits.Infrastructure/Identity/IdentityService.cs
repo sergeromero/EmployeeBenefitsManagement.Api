@@ -39,6 +39,36 @@ namespace Benefits.Infrastructure.Identity
             }
         }
 
+        public async Task<string> CreateUserAsync(string userName, string email, string password)
+        {
+            var user = new ApplicationUser
+            {
+                UserName = userName,
+                Email = email,
+                EmailConfirmed = true
+            };
+
+            var result = await _userManager.CreateAsync(user, password);
+
+            if(!result.Succeeded)
+            {
+                throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+
+            return user.Id;
+        }
+
+        public async Task<List<RoleDto>> GetRolesAsync()
+        {
+            var roles = _roleManager.Roles.Select(r => new RoleDto
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).OrderBy(r => r.Name).ToList();
+
+            return roles;
+        }
+
         public async Task<List<UserDto>> GetUsersAsync()
         {
             var users = _userManager.Users.ToList();
@@ -50,9 +80,14 @@ namespace Benefits.Infrastructure.Identity
             }).ToList();
         }
 
-        public Task<bool> RoleExistsAsync(string role)
+        public async Task<bool> RoleExistsAsync(string role)
         {
-            return _roleManager.RoleExistsAsync(role);
+            return await _roleManager.RoleExistsAsync(role);
+        }
+
+        public async Task<bool> UserExistsByEmaiAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email) != null;
         }
     }
 }

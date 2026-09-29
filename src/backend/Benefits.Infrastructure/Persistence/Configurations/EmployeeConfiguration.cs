@@ -1,4 +1,5 @@
 ﻿using Benefits.Domain;
+using Benefits.Infrastructure.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -55,6 +56,15 @@ namespace Benefits.Infrastructure.Persistence.Configurations
 
             builder.Property(e => e.UserId)
                 .HasMaxLength(450);
+
+            builder.HasIndex(e => e.UserId)
+                .IsUnique();
+
+            builder.HasOne<ApplicationUser>()
+                .WithOne()
+                .HasForeignKey<Employee>(e => e.UserId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
