@@ -89,5 +89,17 @@ namespace Benefits.Infrastructure.Identity
         {
             return await _userManager.FindByEmailAsync(email) != null;
         }
+
+        public async Task DeleteUserAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null) return;
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (!result.Succeeded)
+                throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
     }
 }

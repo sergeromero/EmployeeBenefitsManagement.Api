@@ -13,5 +13,6 @@ namespace Benefits.Application.Infrastructure.Contracts
         public DbSet<EnrollmentCategory> EnrollmentCategories { get; set; }
         public DbSet<BenefitPlan> BenefitPlans { get; set; }
         public DbSet<EmployeeEnrollment> EmployeeEnrollments { get; set; }
+        public DbSet<EmployeeProvisioningProcess> ProvisioningProcesses { get; }
     }
 }

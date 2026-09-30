@@ -14,7 +14,7 @@ export class NotificationService {
 
         setTimeout(() => {
             this._notifications.update((list) => list.slice(1));
-        }, 300);
+        }, 3000);
     }
 
     showError(message: string) {

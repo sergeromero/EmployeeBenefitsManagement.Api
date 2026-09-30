@@ -10,5 +10,6 @@ namespace Benefits.Application.Infrastructure.Contracts
         Task<bool> UserExistsByEmaiAsync(string email);
         Task<List<UserDto>> GetUsersAsync();
         Task<List<RoleDto>> GetRolesAsync();
+        Task DeleteUserAsync(string userId);
     }
 }

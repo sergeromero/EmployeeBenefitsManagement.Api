@@ -31,6 +31,8 @@ namespace Benefits.Infrastructure.Persistence
 
         public DbSet<EmployeeEnrollment> EmployeeEnrollments { get; set; } = default!;
 
+        public DbSet<EmployeeProvisioningProcess> ProvisioningProcesses { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

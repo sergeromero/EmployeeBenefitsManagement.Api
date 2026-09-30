@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Scrutor;
-using FluentValidation;
+﻿using Benefits.Application.Application.Contracts;
 using Benefits.Application.Behaviors;
+using Benefits.Application.Services;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using Scrutor;
 
 namespace Benefits.Application.DI
 {
@@ -23,6 +25,8 @@ namespace Benefits.Application.DI
             });
 
             services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyMarker).Assembly);
+
+            services.AddScoped<IProvisioningService, ProvisioningService>();
 
             return services;
         }
