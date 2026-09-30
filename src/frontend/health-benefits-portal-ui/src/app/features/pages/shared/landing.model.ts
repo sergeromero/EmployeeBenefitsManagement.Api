@@ -4,6 +4,7 @@ export interface LandingAction {
     id: string;
     label: string;
     description: string;
-    route: string;
+    route?: string;
     roles: UserRole[];
+    children?: LandingAction[]
 }

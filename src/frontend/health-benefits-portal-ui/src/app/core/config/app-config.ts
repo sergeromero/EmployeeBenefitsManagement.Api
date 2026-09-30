@@ -3,4 +3,5 @@ export interface AppConfig {
     loginUrl: string;
     employeesUrl: string;
     benefitsUrl: string;
+    rolesUrl: string;
 } 

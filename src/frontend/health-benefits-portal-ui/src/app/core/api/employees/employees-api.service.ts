@@ -5,6 +5,8 @@ import { ApiClientService } from "../base/api-client.service";
 import { EmployeeDto } from "../../contracts/employee/employee.dto";
 import { CreateEmployeeRequest } from "../../contracts/employee/create-employee.request";
 import { UpdateEmployeeRequest } from "../../contracts/employee/update-employee.request";
+import { CreateEmployeeWithUserRequest } from "@core/contracts/employee/create-employee-with-user.request";
+import { RoleDto } from "@core/contracts/role/role.dto";
 
 @Injectable({
     providedIn: "root"
@@ -22,7 +24,7 @@ export class EmployeesApiService {
     }
 
     create(request: CreateEmployeeRequest): Observable<number> {
-        return this.api.post<CreateEmployeeRequest, number>('${this.appConfig.employeesUrl}', request);
+        return this.api.post<CreateEmployeeRequest, number>(`${this.appConfig.employeesUrl}`, request);
     }
 
     update(request: UpdateEmployeeRequest): Observable<void> {
@@ -31,5 +33,13 @@ export class EmployeesApiService {
 
     delete(id: number): Observable<void> {
         return this.api.delete<void>(`${this.appConfig.employeesUrl}/${id}`);
+    }
+
+    createWithUser(request: CreateEmployeeWithUserRequest): Observable<number> {
+        return this.api.post<CreateEmployeeWithUserRequest, number>(`${this.appConfig.employeesUrl}/complete`, request);
+    }
+
+    getRoles(): Observable<RoleDto[]> {
+        return this.api.get<RoleDto[]>(`${this.appConfig.rolesUrl}`);
     }
 }

@@ -1,9 +1,36 @@
 <nav class="sidebar">
-    <ul>
-        @for (action of actions(); track action) {
-            <a [routerLink]="action.route" routerLinkActive="active">
-                {{action.label}}
-            </a>
+  @for (action of actions(); track action.id) {
+    @if (action.children) {
+      <div class="menu-group">
+        <div class="menu-header" (click)="toggleSection(action.id)" [class.expanded]="isExpanded(action.id)">
+          <span>{{ action.label }}</span>
+          <span class="chevron">
+            {{ isExpanded(action.id) ? '▼' : '▶' }}
+          </span>
+        </div>
+
+        @if (isExpanded(action.id)) {
+          <div class="menu-children">
+            @for (child of action.children; track child.id) {
+              <a
+                class="menu-item"
+                [routerLink]="child.route"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }">
+                {{ child.label }}
+              </a>
+            }
+          </div>
         }
-    </ul>
+      </div>
+    } @else {
+      <a
+        class="menu-item"
+        [routerLink]="action.route"
+        routerLinkActive="active"
+        [routerLinkActiveOptions]="{ exact: true }">
+        {{ action.label }}
+      </a>
+    }
+  }
 </nav>

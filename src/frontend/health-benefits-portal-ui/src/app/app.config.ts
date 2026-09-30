@@ -20,7 +20,8 @@ export const appConfig: ApplicationConfig = {
         apiBaseUrl: "https://localhost:7129/api",
         loginUrl: "auth/login",
         employeesUrl: "employees",
-        benefitsUrl: "benefits"
+        benefitsUrl: "benefits",
+        rolesUrl: "roles"
       }
     },
     {

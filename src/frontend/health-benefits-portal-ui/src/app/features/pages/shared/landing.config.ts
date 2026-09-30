@@ -16,12 +16,28 @@ export const LANDING_ACTIONS: LandingAction[] = [
         roles: ["Administrator", "Employee", "HR"]
     },
     {
-        id: "manage-employees",
-        label: "Manage Employees",
-        description: "Create and manage employees.",
-        route: "/employees",
-        roles: ["Administrator", "HR"]
+        id: "employees-group",
+        label: "Employees",
+        description: "Employee management",
+        roles: ["Administrator", "HR"],
+        children: [
+            {
+                id: "list-employees",
+                label: "Employee Lookup",
+                description: "Employee Lookup",
+                route: "/employees",
+                roles: ["Administrator", "HR"]
+            },
+            {
+                id: "create-employees",
+                label: "Create Employees",
+                description: "Adding new employees.",
+                route: "/employees/create",
+                roles: ["Administrator", "HR"]
+            },
+        ]
     },
+
     {
         id: "admin-user-management",
         label: "User & Role Management",

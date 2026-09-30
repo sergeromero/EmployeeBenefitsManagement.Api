@@ -29,8 +29,18 @@ export const routes: Routes = [
             {
                 path: 'employees',
                 canActivate: [authGuard],
-                loadComponent: () => import("./features/pages/employee/employee.component").then(m => m.EmployeeComponent),
-                data: { roles: ["Administrator", "HR"]}
+                loadComponent: () => import("./features/pages/employee-shell/employee-shell.component").then(m => m.EmployeeShellComponent),
+                data: { roles: ["Administrator", "HR"]},
+                children: [
+                    {
+                        path: '',
+                        loadComponent: () => import("./features/pages/employee-list/employee-list.component").then(m => m.EmployeeListComponent)
+                    },
+                    {
+                        path: 'create',
+                        loadComponent: () => import("./features/pages/employee-create/employee-create.component").then(m => m.EmployeeCreateComponent)
+                    }
+                ]
             },
             {
                 path: "unauthorized",

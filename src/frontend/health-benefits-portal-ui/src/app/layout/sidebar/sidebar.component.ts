@@ -1,10 +1,11 @@
-import { Component, computed, inject } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, computed, inject, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { AuthService } from '@core/auth/application/auth.service';
 import { LANDING_ACTIONS } from '../../features/pages/shared/landing.config';
+import { LandingAction } from '../../features/pages/shared/landing.model';
 
 @Component({
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterModule],
   selector: 'app-sidebar',
   styleUrl: './sidebar.component.scss',
   templateUrl: './sidebar.component.html',
@@ -12,10 +13,25 @@ import { LANDING_ACTIONS } from '../../features/pages/shared/landing.config';
 export class SidebarComponent {
   private readonly authService = inject(AuthService);
 
-  readonly roles = this.authService.roles;
+  expandedSections = signal<Record<string, boolean>>({});
 
-  readonly actions = computed(() => 
-    LANDING_ACTIONS.filter(action => 
-      action.roles.some(role => this.roles().includes(role))
-    ));
+  actions = computed(() => {
+    return LANDING_ACTIONS.filter(a => this.hasAccess(a))
+      .map(a => ({...a, children: a.children?.filter(c => this.hasAccess(c))
+      }));
+  });
+
+  toggleSection(id: string) {
+    this.expandedSections.update(state => ({
+      ...state, [id]: !state[id]
+    }));
+  }
+
+  isExpanded(id: string): boolean {
+    return !!this.expandedSections()[id];
+  }
+
+  private hasAccess(action: LandingAction): boolean {
+    return action.roles.some(role => this.authService.hasRole(role));
+  }
 }

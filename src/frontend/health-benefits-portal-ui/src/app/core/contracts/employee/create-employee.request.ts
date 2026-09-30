@@ -3,6 +3,6 @@ export interface CreateEmployeeRequest {
     firstName: string;
     lastName: string;
     email: string;
-    hireDate: Date
+    hireDate: string
     departmentId: number
 }

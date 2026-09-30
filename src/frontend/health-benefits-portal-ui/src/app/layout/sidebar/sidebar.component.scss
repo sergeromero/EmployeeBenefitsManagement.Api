@@ -1,35 +1,67 @@
 .sidebar {
-  height: 100%;
-  padding: 1rem;
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
   display: flex;
-  flex-direction: column; // ✅ THIS makes it vertical
+  flex-direction: column;
+  padding: 1rem;
   gap: 0.5rem;
+  width: 220px;
 }
 
-.sidebar li {
-  width: 100%;
+/* Group container */
+.menu-group {
+  display: flex;
+  flex-direction: column;
 }
 
-.sidebar a {
-  display: block;
+/* Header */
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
   padding: 0.5rem 0.75rem;
+  cursor: pointer;
+
+  border-radius: 6px;
+  transition: background 0.2s, font-weight 0.2s;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &.expanded {
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* Arrow */
+.chevron {
+  font-size: 12px;
+}
+
+/* Children container */
+.menu-children {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+  margin-top: 0.25rem;
+}
+
+/* Links */
+.menu-item {
+  padding: 0.4rem 0.75rem;
+  border-radius: 6px;
   text-decoration: none;
-  color: #333;
-  border-radius: 4px;
-}
+  color: inherit;
 
-.sidebar a:hover {
-  background-color: #f0f0f0;
-}
+  transition: background 0.2s;
 
-.sidebar a.active {
-  background-color: #1976d2;
-  color: white;
+  &:hover {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  &.active {
+    background: rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+  }
 }
