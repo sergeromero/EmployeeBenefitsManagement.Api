@@ -1,1 +1,58 @@
-<p>employee-list works!</p>
+<table mat-table [dataSource]="employees()" matSort (matSortChange)="onSortChange($event)">
+    <ng-container matColumnDef="employeeNumber">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee #</th>
+        <td mat-cell *matCellDef="let e">{{ e.employeeNumber }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="firstName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>First Name</th>
+        <td mat-cell *matCellDef="let e">{{ e.firstName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Last Name</th>
+        <td mat-cell *matCellDef="let e">{{ e.lastName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let e">{{ e.email }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="hireDate">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Hire Date</th>
+        <td mat-cell *matCellDef="let e">{{ e.hireDate }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="departmentName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Department Name</th>
+        <td mat-cell *matCellDef="let e">{{ e.departmentName }}</td>
+    </ng-container>
+
+    @if (isAdmin) {
+        <ng-container matColumnDef="userName">
+            <th mat-header-cell *matHeaderCellDef>User Name</th>
+            <td mat-cell *matCellDef="let e">{{ e.userName }}</td>
+        </ng-container>
+    } @else {
+        <ng-container matColumnDef="hasUser">
+            <th mat-header-cell *matHeaderCellDef>Has User</th>
+            <td mat-cell *matCellDef="let e">
+                {{ e.hasUser ? "Yes" : "No" }}
+            </td>
+        </ng-container>
+    }
+
+      <!-- HEADER ROW -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+
+    <!-- DATA ROW -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>
+
+<mat-paginator
+    [length]="totalCount()"
+    [pageSize]="pageSize()"
+    [pageSizeOptions]="[10, 15, 20]"
+    (page)="onPageChange($event)">
+</mat-paginator>

@@ -3,6 +3,7 @@ using Benefits.Application.Features.Employees.CreateEmployee;
 using Benefits.Application.Features.Employees.CreateEmployeeWithUser;
 using Benefits.Application.Features.Employees.DeleteEmployee;
 using Benefits.Application.Features.Employees.Queries.GetEmployeeById;
+using Benefits.Application.Features.Employees.Queries.GetEmployees;
 using Benefits.Application.Features.Employees.Queries.SearchEmployees;
 using Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits;
 using Benefits.Application.Features.Employees.UpdateEmployee;
@@ -51,7 +52,7 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [Authorize(Roles = $"{Roles.Administrator},{Roles.HR},{Roles.Employee}")]
-        [HttpGet]
+        [HttpGet("search")]
         public async Task<ActionResult<List<EmployeeBasicInfoDto>>> Search([FromQuery] SearchEmployeesQuery query, CancellationToken cancellationToken)
         {
             var employees = await _mediator.Send(query, cancellationToken);
@@ -112,6 +113,14 @@ namespace HealthBenefitsPortal.Controllers
             var employeeId = await _mediator.Send(command);
 
             return CreatedAtAction(nameof(GetById), new { id = employeeId }, employeeId);
+        }
+
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
+        [HttpGet]
+        public async Task<ActionResult> GetEmployees([FromQuery] GetEmployeesQuery query, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(query);
+            return Ok(result);
         }
     }
 }

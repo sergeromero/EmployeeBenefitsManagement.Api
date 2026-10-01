@@ -5,6 +5,7 @@ using Benefits.Infrastructure.Configuration;
 using Benefits.Infrastructure.Configuration.Identity;
 using Benefits.Infrastructure.Identity;
 using Benefits.Infrastructure.Persistence;
+using Benefits.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -92,6 +93,9 @@ namespace Benefits.Infrastructure.DI
                     ClockSkew = TimeSpan.Zero
                 };
             });
+
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
 
             return services;
         }

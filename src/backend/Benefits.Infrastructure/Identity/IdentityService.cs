@@ -4,6 +4,7 @@ using Benefits.Application.Exceptions.BusinessRuleViolationException;
 using Benefits.Application.Infrastructure.Contracts;
 using Benefits.Common;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Benefits.Infrastructure.Identity
 {
@@ -100,6 +101,18 @@ namespace Benefits.Infrastructure.Identity
 
             if (!result.Succeeded)
                 throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+        }
+
+        public async Task<Dictionary<string, string>> GetUserNamesByIdsAsync(IEnumerable<string?> userIds, CancellationToken cancellationToken)
+        {
+            var ids = userIds.Where(id => id != null).Distinct().ToList();
+
+            var users = await _userManager.Users
+                .Where(u => ids.Contains(u.Id))
+                .Select(u => new { u.Id, u.UserName })
+                .ToListAsync(cancellationToken);
+
+            return users.ToDictionary(u => u.Id, u => u.UserName!);
         }
     }
 }

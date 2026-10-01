@@ -20,7 +20,7 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = Roles.Administrator)]
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
         public async Task<IActionResult> GetRoles(CancellationToken cancellationToken)
         {
             var roles = await _mediator.Send(new GetUserRolesQuery(), cancellationToken);

@@ -23,7 +23,7 @@ Content-Type: application/json
 }
 
 ###
-GET {{rootURL}}/api/employees?name=serge
+GET {{rootURL}}/api/employees/search?name=serge
 Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###

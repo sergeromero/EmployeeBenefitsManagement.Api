@@ -1,0 +1,14 @@
+﻿using Benefits.Application.Common;
+using MediatR;
+
+namespace Benefits.Application.Features.Employees.Queries.GetEmployees
+{
+    public sealed class GetEmployeesQuery : IRequest<PagedResult<EmployeeListItemDto>>
+    {
+        public int Page { get; set; } = 1;
+        public int PageSize { get; set; } = 10;
+
+        public string? SortBy { get; set; }
+        public string? SortDirection { get; set; } = "asc";
+    }
+}

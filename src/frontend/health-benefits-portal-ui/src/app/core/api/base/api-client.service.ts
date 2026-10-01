@@ -1,5 +1,5 @@
 import { Injectable, inject } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { APP_CONFIG } from "../../config/app-config.token";
 import { Observable } from "rxjs";
 
@@ -12,8 +12,18 @@ export class ApiClientService {
 
     private baseUrl = this.appConfig.apiBaseUrl;
 
-    get<T>(endpoint: string): Observable<T> {
-        return this.http.get<T>(this.buildUrl(endpoint));
+    get<T>(endpoint: string, options?: { params?: Record<string, any>;}): Observable<T> {
+        let httpParams = new HttpParams();
+
+        if (options?.params) {
+            Object.entries(options.params).forEach(([key, value]) => {
+                if (value !== undefined && value !== null) {
+                    httpParams = httpParams.set(key, value);
+                }
+            });
+        }
+
+        return this.http.get<T>(this.buildUrl(endpoint), {params: httpParams});
     }
 
     post<TRequest, TResponse>(endpoint: string, body: TRequest): Observable<TResponse> {

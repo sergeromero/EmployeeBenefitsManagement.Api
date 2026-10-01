@@ -4,6 +4,6 @@
     {
         public string Name { get; set; } = null!;
 
-        public IReadOnlyCollection<Employee> Employees { get; set; } = [];
+        public ICollection<Employee> Employees { get; set; } = new List<Employee>();
     }
 }

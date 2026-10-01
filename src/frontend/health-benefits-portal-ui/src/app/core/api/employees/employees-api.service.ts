@@ -7,6 +7,8 @@ import { CreateEmployeeRequest } from "../../contracts/employee/create-employee.
 import { UpdateEmployeeRequest } from "../../contracts/employee/update-employee.request";
 import { CreateEmployeeWithUserRequest } from "@core/contracts/employee/create-employee-with-user.request";
 import { RoleDto } from "@core/contracts/role/role.dto";
+import { PagedResult } from "@core/contracts/models/paged-result.model";
+import { EmployeeListItem } from "@core/contracts/models/employee-list-item.model";
 
 @Injectable({
     providedIn: "root"
@@ -15,8 +17,13 @@ export class EmployeesApiService {
     private api = inject(ApiClientService);
     private appConfig = inject(APP_CONFIG);
 
-    getAll(): Observable<EmployeeDto[]> {
-        return this.api.get<EmployeeDto[]>(`${this.appConfig.employeesUrl}`);
+    getAll(params: {
+        page: number;
+        pageSize: number;
+        sortBy?: string;
+        sortDirection?: string;
+    }): Observable<PagedResult<EmployeeListItem>> {
+        return this.api.get<PagedResult<EmployeeListItem>>(`${this.appConfig.employeesUrl}`, {params});
     }
 
     getById(id: number): Observable<EmployeeDto> {

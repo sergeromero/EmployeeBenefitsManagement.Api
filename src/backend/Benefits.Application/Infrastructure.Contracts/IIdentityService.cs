@@ -11,5 +11,6 @@ namespace Benefits.Application.Infrastructure.Contracts
         Task<List<UserDto>> GetUsersAsync();
         Task<List<RoleDto>> GetRolesAsync();
         Task DeleteUserAsync(string userId);
+        Task<Dictionary<string, string>> GetUserNamesByIdsAsync(IEnumerable<string?> userIds, CancellationToken cancellationToken);
     }
 }
