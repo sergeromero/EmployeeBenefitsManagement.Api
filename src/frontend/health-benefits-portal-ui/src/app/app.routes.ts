@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { AppAuthLayout } from './layout/auth-layout/auth-layout.component';
 import { AppMainLayout } from './layout/main-layout/main-layout.component';
 import { authGuard } from '@core/guards/auth.guard';
+import { roleGuard } from '@core/guards/role.guard';
 
 export const routes: Routes = [    
     //LOGIN
@@ -28,7 +29,7 @@ export const routes: Routes = [
             //RESTRICTED - AUTHENTICATED USERS ONLY
             {
                 path: 'employees',
-                canActivate: [authGuard],
+                canActivate: [authGuard, roleGuard],
                 loadComponent: () => import("./features/pages/employee-shell/employee-shell.component").then(m => m.EmployeeShellComponent),
                 data: { roles: ["Administrator", "HR"]},
                 children: [

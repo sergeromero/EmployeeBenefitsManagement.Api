@@ -1,10 +1,12 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { AuthService } from '@core/auth/application/auth.service';
 import { catchError, throwError } from 'rxjs';
 import { getPublicEndpoints } from '@core/api/auth/public-endpoints';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
+  const router = inject(Router);
   const authService = inject(AuthService);
   const token = authService.token();
 
@@ -22,6 +24,10 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
         authService.clear();
+      }
+
+      if (error.status === 403) {
+        router.navigate(['/unauthorized']);
       }
 
       return throwError(() => error);

@@ -11,7 +11,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         catchError((error) => {
             const appError = mapHttpError(error);
             errorService.handleError(appError);
-            return throwError(() => appError);
+            return throwError(() => error);
         })
     );
 }
