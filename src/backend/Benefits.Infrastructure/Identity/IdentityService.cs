@@ -1,4 +1,5 @@
-﻿using Benefits.Application.Admin;
+﻿using System.Linq;
+using Benefits.Application.Admin;
 using Benefits.Application.Exceptions;
 using Benefits.Application.Exceptions.BusinessRuleViolationException;
 using Benefits.Application.Infrastructure.Contracts;
@@ -21,23 +22,19 @@ namespace Benefits.Infrastructure.Identity
 
         public async Task AssignRoleToUserAsync(string userId, string role)
         {
-            var user = await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException("User not found");
+            var user = await FindUserByIdAsync(userId);
 
-            if(!await _roleManager.RoleExistsAsync(role))
+            if (!await _roleManager.RoleExistsAsync(role))
             {
                 throw new NotFoundException($"Role '{role}' was not found.");
             }
 
-            if(!await _userManager.IsInRoleAsync(user, role))
-            {
-                var result = await _userManager.AddToRoleAsync(user, role);
+            var currentRoles = await _userManager.GetRolesAsync(user);
+            var removeResult = await _userManager.RemoveFromRolesAsync(user, currentRoles);
+            VerifyIdentityResult(removeResult);
 
-                if (!result.Succeeded)
-                {
-                    var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-                    throw new IdentityOperationException(errors);
-                }
-            }
+            var result = await _userManager.AddToRoleAsync(user, role);
+            VerifyIdentityResult(result);
         }
 
         public async Task<string> CreateUserAsync(string userName, string email, string password)
@@ -50,11 +47,7 @@ namespace Benefits.Infrastructure.Identity
             };
 
             var result = await _userManager.CreateAsync(user, password);
-
-            if(!result.Succeeded)
-            {
-                throw new InvalidOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
-            }
+            VerifyIdentityResult(result);
 
             return user.Id;
         }
@@ -98,9 +91,7 @@ namespace Benefits.Infrastructure.Identity
             if (user == null) return;
 
             var result = await _userManager.DeleteAsync(user);
-
-            if (!result.Succeeded)
-                throw new Exception(string.Join(", ", result.Errors.Select(e => e.Description)));
+            VerifyIdentityResult(result);
         }
 
         public async Task<Dictionary<string, string>> GetUserNamesByIdsAsync(IEnumerable<string?> userIds, CancellationToken cancellationToken)
@@ -114,5 +105,67 @@ namespace Benefits.Infrastructure.Identity
 
             return users.ToDictionary(u => u.Id, u => u.UserName!);
         }
+
+        public async Task UpdateUserAsync(string userId, string userName, string email)
+        {
+            var user = await FindUserByIdAsync(userId);
+
+            user.UserName = userName;
+            user.Email = email;
+            user.EmailConfirmed = true;
+            user.NormalizedUserName = _userManager.NormalizeName(userName);
+            user.NormalizedEmail = _userManager.NormalizeEmail(email);
+
+            var securityStampResult = await _userManager.UpdateSecurityStampAsync(user);
+            VerifyIdentityResult(securityStampResult);
+
+            var updateResult = await _userManager.UpdateAsync(user);
+            VerifyIdentityResult(updateResult);
+        }
+
+        public async Task UpdatePasswordAsync(string userId, string password)
+        {
+            var user = await FindUserByIdAsync(userId);
+
+            var removeResult = await _userManager.RemovePasswordAsync(user);
+            VerifyIdentityResult(removeResult);
+
+            var addResult = await _userManager.AddPasswordAsync(user, password);
+            VerifyIdentityResult(addResult);
+
+            await _userManager.UpdateSecurityStampAsync(user);
+        }
+
+        public async Task<Application.Features.Employees.Common.UserDto> GetUserByIdAsync(string userId)
+        {
+            var user = await FindUserByIdAsync(userId);
+
+            return new Application.Features.Employees.Common.UserDto
+            {
+                Email = user.Email,
+                UserName = user.UserName
+            };
+        }
+        public async Task<string> GetUserRoleAsync(string userId)
+        {
+            var user = await FindUserByIdAsync(userId);
+            var result = await _userManager.GetRolesAsync(user);
+
+            return result.FirstOrDefault();
+        }
+
+        private static void VerifyIdentityResult(IdentityResult result)
+        {
+            if (!result.Succeeded)
+            {
+                throw new IdentityOperationException(string.Join(", ", result.Errors.Select(e => e.Description)));
+            }
+        }
+
+        private async Task<ApplicationUser> FindUserByIdAsync(string userId)
+        {
+            return await _userManager.FindByIdAsync(userId) ?? throw new NotFoundException("User not found");
+        }
+
     }
 }

@@ -1,0 +1,54 @@
+.employee-form-card {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+/* Grid Layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+/* Role section spacing */
+.role-section {
+  margin-top: 1rem;
+  width: 100%;
+  max-width: 300px;
+}
+
+/* Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* Material field consistency */
+mat-form-field {
+  width: 100%;
+}
+
+/* Divider spacing */
+mat-divider {
+  margin: 1.5rem 0;
+}

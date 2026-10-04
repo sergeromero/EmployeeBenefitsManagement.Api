@@ -65,6 +65,7 @@ namespace Benefits.Application.Features.Employees.Queries.GetEmployees
 
             var items = employees.Select(e => new EmployeeListItemDto
             {
+                Id = e.Id,
                 EmployeeNumber = e.EmployeeNumber,
                 FirstName = e.FirstName,
                 LastName = e.LastName,

@@ -9,6 +9,8 @@ import { CreateEmployeeWithUserRequest } from "@core/contracts/employee/create-e
 import { RoleDto } from "@core/contracts/role/role.dto";
 import { PagedResult } from "@core/contracts/models/paged-result.model";
 import { EmployeeListItem } from "@core/contracts/models/employee-list-item.model";
+import { UpdateEmployeeCompleteRequest } from "@core/contracts/employee/update-employee-complete.request";
+import { EmployeeWithUserDto } from "@core/contracts/employee/employee-with-user.dto";
 
 @Injectable({
     providedIn: "root"
@@ -30,12 +32,20 @@ export class EmployeesApiService {
         return this.api.get<EmployeeDto>(`${this.appConfig.employeesUrl}/${id}`);
     }
 
+    getCompleteById(id: number): Observable<EmployeeWithUserDto> {
+        return this.api.get<EmployeeWithUserDto>(`${this.appConfig.employeesUrl}/${id}/complete`);
+    }
+
     create(request: CreateEmployeeRequest): Observable<number> {
         return this.api.post<CreateEmployeeRequest, number>(`${this.appConfig.employeesUrl}`, request);
     }
 
     update(request: UpdateEmployeeRequest): Observable<void> {
         return this.api.put<UpdateEmployeeRequest, void>(`${this.appConfig.employeesUrl}/${request.id}`, request);
+    }
+
+    updateWithUser(request: UpdateEmployeeCompleteRequest): Observable<void> {
+        return this.api.put<UpdateEmployeeCompleteRequest, void>(`${this.appConfig.employeesUrl}/${request.id}/complete`, request)
     }
 
     delete(id: number): Observable<void> {

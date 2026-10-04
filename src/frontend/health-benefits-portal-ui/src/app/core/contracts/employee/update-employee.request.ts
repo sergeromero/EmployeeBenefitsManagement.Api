@@ -1,9 +1,10 @@
 export interface UpdateEmployeeRequest {
-    id: number
-    employeeId: string;
+    id: number;
+    employeeNumber: string;
     firstName: string;
     lastName: string;
     email: string;
-    hireDate: Date
+    hireDate: string;
     departmentId: number;
 }
+

@@ -1,5 +1,4 @@
 ﻿using Benefits.Application.Features.Employees.Common;
-using Benefits.Application.Features.Employees.CreateEmployeeWithUser;
 
 namespace HealthBenefitsPortal.Requests
 {

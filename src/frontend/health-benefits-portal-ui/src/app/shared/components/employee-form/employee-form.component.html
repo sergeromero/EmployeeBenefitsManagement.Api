@@ -1,0 +1,84 @@
+<mat-card class="employee-form-card">
+    <mat-card-header>
+        <mat-card-title>Create Employee @if(isAdmin()){with User}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form-container">
+
+            <section class="form-section">
+                <h3 class="section-title">Employee Information</h3>
+
+                <div formGroupName="employee" class="form-grid">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Employee Number</mat-label>
+                        <input formControlName="employeeNumber" matInput />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>First Name</mat-label>
+                        <input formControlName="firstName" matInput />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Last Name</mat-label>
+                        <input formControlName="lastName" matInput />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Email</mat-label>
+                        <input formControlName="email" matInput type="email" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Hire Date</mat-label>
+                        <input formControlName="hireDate" matInput type="date" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Department</mat-label>
+                        <input formControlName="departmentId" matInput type="number" />
+                    </mat-form-field>
+                </div>                
+            </section>
+
+            @if (isAdmin()) {
+                <mat-divider></mat-divider>
+                <section class="form-section">
+                    <h3 class="section-title">User Account</h3>
+                    <div formGroupName="user" class="form-grid">
+                        
+                        <mat-form-field appearance="outline">
+                            <mat-label>User Name</mat-label>
+                            <input formControlName="userName" matInput />
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Email</mat-label>
+                            <input formControlName="email" matInput />
+                        </mat-form-field>
+                        <mat-form-field appearance="outline">
+                            <mat-label>Password</mat-label>
+                            <input formControlName="password" type="password" matInput />
+                        </mat-form-field>
+                    </div>
+
+                    <div class="role-section">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Role</mat-label>
+                            <mat-select formControlName="role">
+                                @for (r of roles; track r.id) {
+                                    <mat-option [value]="r.name">
+                                        {{ r.name }}
+                                    </mat-option>            
+                                }
+                            </mat-select>
+                        </mat-form-field>          
+                    </div>
+          
+                </section>
+            }
+
+            <div class="form-actions">
+                <button mat-raised-button color="primary" type="submit" [disabled]="loading()">
+                    {{ mode === "create" ? "Create" : "Save" }}
+                </button>
+            </div>
+
+        </form>
+    </mat-card-content>
+</mat-card>

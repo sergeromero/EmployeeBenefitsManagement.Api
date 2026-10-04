@@ -1,4 +1,5 @@
 export interface EmployeeListItem {
+  id: number;
   employeeNumber: string;
   firstName: string;
   lastName: string;

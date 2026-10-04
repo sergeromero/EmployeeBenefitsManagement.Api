@@ -27,6 +27,14 @@ GET {{rootURL}}/api/employees/search?name=serge
 Authorization: Bearer {{login.response.body.$.accessToken}}
 
 ###
+GET {{rootURL}}/api/employees/1/complete
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
+GET {{rootURL}}/api/employees/1
+Authorization: Bearer {{login.response.body.$.accessToken}}
+
+###
 POST {{rootURL}}/api/employees/
 Authorization: Bearer {{login.response.body.$.accessToken}}
 Content-Type: application/json

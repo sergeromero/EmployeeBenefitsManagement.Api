@@ -4,9 +4,11 @@ using Benefits.Application.Features.Employees.CreateEmployeeWithUser;
 using Benefits.Application.Features.Employees.DeleteEmployee;
 using Benefits.Application.Features.Employees.Queries.GetEmployeeById;
 using Benefits.Application.Features.Employees.Queries.GetEmployees;
+using Benefits.Application.Features.Employees.Queries.GetEmployeeWithUserById;
 using Benefits.Application.Features.Employees.Queries.SearchEmployees;
 using Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits;
 using Benefits.Application.Features.Employees.UpdateEmployee;
+using Benefits.Application.Features.Employees.UpdateEmployeeWithUser;
 using Benefits.Common;
 using Benefits.Domain.Constants;
 using HealthBenefitsPortal.Requests;
@@ -43,7 +45,7 @@ namespace HealthBenefitsPortal.Controllers
         {
             var employee = await _mediator.Send(new GetEmployeeByIdQuery(id));
 
-            if(employee is null)
+            if (employee is null)
             {
                 return NotFound();
             }
@@ -121,6 +123,31 @@ namespace HealthBenefitsPortal.Controllers
         {
             var result = await _mediator.Send(query);
             return Ok(result);
+        }
+
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpGet("{id:int}/complete")]
+        public async Task<ActionResult> GetEmployeeWithUserById(int id, CancellationToken cancellationToken)
+        {
+            var query = new GetEmployeeWithUserByIdQuery(id);
+            var result = await _mediator.Send(query, cancellationToken);
+
+            return Ok(result);
+        }
+
+        [Authorize(Roles = Roles.Administrator)]
+        [HttpPut("{id:int}/complete")]
+        public async Task<IActionResult> UpdateEmployeeWithUser(int id, [FromBody] UpdateEmployeeWithUserRequest request, CancellationToken cancellationToken)
+        {
+            request.Employee.Id = id;
+            var command = new UpdateEmployeeWithUserCommand(
+                request.Employee,
+                request.User,
+                request.Role);
+
+            await _mediator.Send(command, cancellationToken);
+
+            return NoContent();
         }
     }
 }

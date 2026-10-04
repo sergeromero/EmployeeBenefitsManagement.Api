@@ -1,1 +1,8 @@
-<p>employee-edit works!</p>
+@if (data()) {
+    <app-employee-form
+        mode="edit"
+        [roles]="roles()"
+        [initialData]="data()"
+        (formSubmit)="submit($event)">
+    </app-employee-form>
+}

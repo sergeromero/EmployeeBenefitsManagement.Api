@@ -40,6 +40,10 @@ export const routes: Routes = [
                     {
                         path: 'create',
                         loadComponent: () => import("./features/pages/employee-create/employee-create.component").then(m => m.EmployeeCreateComponent)
+                    },
+                    {
+                        path: ':id/edit',
+                        loadComponent: () => import("./features/pages/employee-edit/employee-edit.component").then(m => m.EmployeeEditComponent)
                     }
                 ]
             },
