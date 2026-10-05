@@ -11,7 +11,6 @@ public class EmployeeProvisioningProcessConfiguration
 
         builder.Property(x => x.Email).IsRequired();
         builder.Property(x => x.UserName).IsRequired();
-        builder.Property(x => x.Password).IsRequired();
         builder.Property(x => x.Role).IsRequired();
 
         builder.Property(x => x.Status).HasConversion<int>();

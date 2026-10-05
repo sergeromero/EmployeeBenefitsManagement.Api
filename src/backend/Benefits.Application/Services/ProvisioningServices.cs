@@ -27,7 +27,6 @@ public class ProvisioningService : IProvisioningService
             Id = Guid.NewGuid(),
             Email = request.User.Email,
             UserName = request.User.UserName,
-            Password = request.User.Password,
             Role = request.Role,
             Status = ProvisioningStatus.Started,
             CreatedAt = DateTime.UtcNow
@@ -39,10 +38,16 @@ public class ProvisioningService : IProvisioningService
         try
         {
             // STEP 2 — Create user
+
+            if (string.IsNullOrWhiteSpace(request.User.Password))
+            {
+                throw new InvalidOperationException("Password is required for user creation.");
+            }
+
             process.UserId = await _identityService.CreateUserAsync(
-                process.UserName,
-                process.Email,
-                process.Password);
+                request.User.UserName,
+                request.User.Email,
+                request.User.Password);
 
             process.Status = ProvisioningStatus.UserCreated;
             await _dbContext.SaveChangesAsync(cancellationToken);
@@ -113,20 +118,30 @@ public class ProvisioningService : IProvisioningService
             }
 
             await _identityService.UpdateUserAsync(
-           employee.UserId,
-           request.User.UserName,
-           request.User.Email
-       );
+               employee.UserId,
+               request.User.UserName,
+               request.User.Email
+            );
 
             process.Status = ProvisioningStatus.UserUpdated;
             await _dbContext.SaveChangesAsync(cancellationToken);
 
             if(!string.IsNullOrWhiteSpace(request.User.Password))
             {
-                await _identityService.UpdatePasswordAsync(employee.UserId, request.User.Password);
+                try
+                {
+                    await _identityService.UpdatePasswordAsync(employee.UserId, request.User.Password);
 
-                process.Status = ProvisioningStatus.PasswordUpdated;
-                await _dbContext.SaveChangesAsync(cancellationToken);
+                    process.Status = ProvisioningStatus.PasswordUpdated;
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                }
+                catch(Exception ex)
+                {
+                    process.Status = ProvisioningStatus.PasswordFailed;
+                    process.Error = $"Password update failed: {ex.Message}";
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                    throw;
+                }
             }
 
             await _identityService.AssignRoleToUserAsync(employee.UserId, request.Role);

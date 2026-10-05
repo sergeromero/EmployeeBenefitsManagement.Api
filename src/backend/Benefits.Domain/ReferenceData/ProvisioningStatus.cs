@@ -11,4 +11,5 @@ public enum ProvisioningStatus
     UserUpdated = 6,
     PasswordUpdated = 7,
     EmployeeUpdated = 8,
+    PasswordFailed = 9,
 }
