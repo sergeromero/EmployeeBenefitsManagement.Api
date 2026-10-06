@@ -74,6 +74,8 @@ Contains all technical implementations, including:
 
 * Create Employee
 * Retrieve Employee by Id
+* Create Users
+* Assign Users to Employees
 
 ### Benefits Domain
 
@@ -365,11 +367,11 @@ Hit the F5 key or click on the Play button on Visual Studio to run the backend a
 
 If everything is configured correctly, the backend should start successfully and the configured seed data should be created in the database. The populated tables are:
 
-> IdentityUser 
-> IdentityRole
-> IdentityUserRoles
-> Departments
-> Employees
+> IdentityUser, 
+> IdentityRole,
+> IdentityUserRoles,
+> Departments,
+> Employees,
 
 At this point, the API is ready to accept requests from the Angular frontend.
 
@@ -442,9 +444,6 @@ This project demonstrates:
 Planned enhancements include:
 
 * Employee update and deletion
-* Authentication endpoints
-* JWT bearer authentication
-* Role-based authorization
 * Benefit enrollment workflows
 * Unit testing
 * Integration testing
