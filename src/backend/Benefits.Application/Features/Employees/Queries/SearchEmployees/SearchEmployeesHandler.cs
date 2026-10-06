@@ -34,7 +34,7 @@ namespace Benefits.Application.Features.Employees.Queries.SearchEmployees
                 query = query.Where(e => e.EmployeeNumber == request.EmployeeNumber);
             }
 
-            if (request.DepartmentId.HasValue)
+            if (request.DepartmentId.HasValue && request.DepartmentId > 0)
             {
                 query = query.Where(e => e.DepartmentId == request.DepartmentId);
             }

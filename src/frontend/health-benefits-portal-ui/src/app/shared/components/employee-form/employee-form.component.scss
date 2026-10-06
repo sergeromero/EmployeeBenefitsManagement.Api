@@ -1,0 +1,107 @@
+:host {
+  display: block;
+}
+
+.employee-form-card {
+  max-width: 1100px;
+  margin: 2rem auto;
+}
+
+mat-card-header {
+  padding-bottom: 1rem;
+}
+
+mat-card-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+mat-card-content {
+  padding-top: 1rem;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+/*
+ * Employee and user fields.
+ *
+ * Three columns gives us a clean layout on desktop:
+ *
+ * Employee Number | First Name | Last Name
+ * Email           | Hire Date  | Department
+ */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.role-section {
+  width: 100%;
+  max-width: 320px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+mat-divider {
+  margin: 0.25rem 0;
+}
+
+/*
+ * Tablet
+ */
+@media (max-width: 900px) {
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/*
+ * Mobile
+ */
+@media (max-width: 600px) {
+  .employee-form-card {
+    margin: 1rem;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .role-section {
+    max-width: none;
+  }
+}
