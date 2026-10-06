@@ -141,107 +141,284 @@ The seeding process is idempotent, allowing the application to start multiple ti
 * SQL Server
 * Visual Studio 2022 (or later) or Visual Studio Code
 
-### 1. Clone the repository
+
+## 1. Clone the GitHub Repository
+ 
+### Step 1
+
+Select a folder in your file system to clone the HealthBenefitsPortal repository
+```bash
+cd path-to-your-folder
+```
+
+### Step 2. 
+
+Open a PowerShell or Command prompt and clone the HealthBenefitsPortal repository by running the following command:
+```bash
+git clone https://github.com/sergeromero/EmployeeBenefitsManagement.Api.git
+```
+
+## 2. Configure User-Secrets
+
+The project is already configured to use **.NET User Secrets** through its
+UserSecretsId. User Secrets keep sensitive development configuration
+outside of source control.
+
+On a new development machine, add the required values by following these steps:
+
+### Step 1. Open a Developer Command Prompt or Developer PowerShell
+
+From the Windows Start menu, search for either Developer Command Prompt for Visual Studio or Developer PowerShell for Visual Studio.
+
+### Step 2. Navigate to the API project directory
+
+From the Developer Command Prompt or Developer PowerShell, navigate to the API project directory. The HealthBenefitsPortal.csproj file should be located in this directory.
+```bash
+	cd EmployeeBenefitsManagement.Api/src/backend/healthbenefitsportal
+```
+
+> **Important:** The `dotnet user-secrets` commands must be run from the API project directory.
+
+### Step 3. Add the required User Secrets
+
+Run the following commands. You can use the example values shown below or replace them with your own values.
 
 ```bash
-git clone <repository-url>
+dotnet user-secrets set "Jwt:Key" "your-super-secure-key-here-32+chrs" 
+```
+```bash
+dotnet user-secrets set "Identity:DefaultAdministrator:UserName" "admin"
+```
+```bash
+dotnet user-secrets set "Identity:DefaultAdministrator:Password" "your-secure-admin-password"
+```
+```bash
+dotnet user-secrets set "Identity:DefaultAdministrator:Email" "admin@mockdomain.com"
 ```
 
-### 2. Configure User Secrets
+The administrator password is used only for local development. Choose a password appropriate for your local environment.
 
-Initialize User Secrets for the API project:
+### Step 4. Verify the User Secrets (Optional)
+
+Once you have run the commands, you can verify that the values were created successfully by running:
 
 ```bash
-dotnet user-secrets init --project <ApiProject>
+dotnet user-secrets list
 ```
 
-Configure the default administrator credentials:
+> **Security note:** Do not commit User Secret values to source control. User Secrets are stored locally on the development machine and are not included in the Git repository.
 
-```text
-Identity:DefaultAdministrator:UserName
-Identity:DefaultAdministrator:Email
-Identity:DefaultAdministrator:Password
-```
+These values are required by the application's authentication and initial administrator provisioning configuration. If the required values are not configured, the application may fail during startup or authentication/administrator provisioning may not work as expected.
 
-Configure the authentication user Secrets
+
+## 3. Configure the Database
+
+The application requires a SQL Server database. You can configure the connection string using one of the following approaches.
+
+---
+
+### Option 1 — User Secrets (Recommended)
+
+This approach keeps sensitive configuration out of source control and is the preferred method for local development.
+**The project is already configured to use User Secrets. Run these commands from the same API project directory used in the previous section.**
+
+#### Step 1 — Set the Connection String
+
+##### SQL Server (Local Default Instance)
+
 ```bash
-dotnet user-secrets set "Jwt:Key" "your-very-long-secret-key-32+chars"
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost;Database=HealthBenefitsPortalDb;Trusted_Connection=True;TrustServerCertificate=True;"
 ```
 
-### 3. Configure the database connection
+##### SQL Server Express
 
-Update the `DefaultConnection` connection string in `appsettings.Development.json`.
+```bash
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost\\SQLEXPRESS;Database=HealthBenefitsPortalDb;Trusted_Connection=True;TrustServerCertificate=True;"
+```
 
-### 4. Apply the database migrations
+---
 
-```powershell
+### Option 2 — appsettings.Development.json (Visual Studio Friendly)
+
+This option is useful for developers who prefer configuring connections through Visual Studio tools.
+
+#### Step 1 — Open Server Explorer
+
+1. In Visual Studio, go to **View → Server Explorer**
+2. Right-click **Data Connections → Add Connection**
+3. Choose:
+
+   * **Server name**:
+
+     * `localhost` (Full SQL Server)
+     * `localhost\\SQLEXPRESS` (SQL Server Express)
+   * Authentication: **Windows Authentication**
+4. Select or create the database:
+
+   * `HealthBenefitsPortalDb`
+5. Click **Test Connection**, then **OK**
+
+#### Step 2 — Copy the Connection String
+
+After creating the connection:
+
+1. Right-click the connection → **Properties**
+2. Copy the **Connection String**
+
+#### Step 3 — Update appsettings.Development.json
+
+Add or update the following section:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "YOUR_CONNECTION_STRING_HERE"
+  }
+}
+```
+
+>**Important**: If `ConnectionStrings:DefaultConnection` is configured in both User Secrets and `appsettings.Development.json`, the User Secrets value takes precedence. To use the connection string from appsettings.Development.json, remove the corresponding User Secrets entry.
+
+
+---
+
+### ⚙️ Notes
+
+* The application uses **Entity Framework Core migrations** to create and update the database schema.
+* The database will be created automatically when migrations are applied.
+* Ensure that:
+
+  * SQL Server is running
+  * The instance name is correct (`localhost` vs `localhost\\SQLEXPRESS`)
+  * You have sufficient permissions to create databases
+
+---
+
+### 🧪 Troubleshooting
+
+* **Cannot connect to server**
+
+  * Verify SQL Server service is running
+  * Check instance name
+* **Login failed**
+
+  * Ensure correct authentication method
+* **SSL / certificate errors**
+
+  * Ensure `TrustServerCertificate=True` is present in the connection string
+
+---
+
+## 4. Create the Database
+
+Once the connection string has been configured, you can create the database.
+
+### Step 1. Open the HealthBenefitsPortal solution
+
+From Visual Studio select "Open a project or solution". 
+On the Open Project/Solution window, navigate to the solution directory. The HealthBenefitsPortal.slnx file should be located here:
+```bash
+EmployeeBenefitsManagement.Api/src/backend
+```
+
+> **Important:** Before running Entity Framework Core migrations, make sure HealthBenefitsPortal is selected as the solution's Startup Project.
+
+In Visual Studio's Solution Explorer, expand the **20.API** folder, right-click **HealthBenefitsPortal** and select **Set as Startup Project**.
+
+### Step 2. Open the NuGet Package Manager
+
+The NuGet Package Manager Console can be found in the Tools -> NuGet Package Manager -> Package Manager Console menu
+
+### Step 3. Select the Benefits.Infrastructure project
+
+On the Package Manager Console select Benefits.Infrastructure from the 'Default project' dropdown.
+
+### Step 4. Execute the Update-Database command
+
+Run the following command:
+
+```bash
 Update-Database
 ```
 
-or
+## 5. Configure Development Database Seeding
+
+The database seeding process is controlled by configuration settings in `appsettings.json` and environment-specific configuration files.
+
+The default settings in `appsettings.json` intentionally have development seeding disabled. The `appsettings.Development.json` file, where these settings are enabled, is not included in the repository because it is common for developers to store local credentials, connection strings, and secret API keys in this file. Keeping it out of source control helps prevent machine-specific or sensitive configuration from being accidentally committed.
+
+For this demonstration, if you haven't already, add a new file named appsettings.Development.json on the **HealthBenefitsPortal** API project and enable the development seed data by adding this section:
+
+```json
+{ ...
+  "SeedOptions": {
+    "IncludeTestUsers": true,
+    "IncludeDemoData": true
+  },
+  ...
+}
+```
+
+## 6. Run the Backend
+
+Hit the F5 key or click on the Play button on Visual Studio to run the backend application.
+
+If everything is configured correctly, the backend should start successfully and the configured seed data should be created in the database. The populated tables are:
+
+> IdentityUser 
+> IdentityRole
+> IdentityUserRoles
+> Departments
+> Employees
+
+At this point, the API is ready to accept requests from the Angular frontend.
+
+## 7. Install Frontend Dependencies
+
+### Step 1. Navigate to the fronend folder
+
+From the folder where you cloned the repository navigate to:
 
 ```bash
-dotnet ef database update
+cd EmployeeBenefitsManagement.Api\src\frontend\health-benefits-portal-ui
 ```
 
-### 5. Run the application
-
-Start the API using Visual Studio or:
+### Step 2. Run the npm install command
 
 ```bash
-dotnet run
+npm install
 ```
 
-On startup the application will seed the required Identity roles, the default administrator account
-and, if running in Development mode, some test users.
+## 8. Run the Frontend
 
-### 6. Using the API (Authentication Required)
-
-All employee-related endpoints are protected using authentication and require a valid authenticated user.
-
-Authentication Model
-The application uses ASP.NET Core Identity for user management and authentication.
-
-At this stage of the project:
-
-Authentication is handled via Identity.
-A default administrator user is seeded at startup (see Configure User Secrets)
-
-With the applicatin running you can authenticate and get the token by running:
+Open the frontend project in VS Code (or use an existing terminal), then run 
 
 ```bash
-curl https://localhost:7129/api/auth/login -H "Content-Type: application/json" -d "{\"email\": \"youradmin@something.com\", \"password\": \"your-password\"}
+npm run start -- --open
 ```
 
-Alternatively you can use the included HealthBenefitsPortal.http file to authenticate and test the endpoints.
+After a brief moment the frontend application will be built and a new browser window will open on the URL http://localhost:4200.
 
-Test users are also created during project startup, but they need to be configured before available to use. 
-To test the application with these users follow these steps with the received administrator token
-__(the simplest way of doing it is with the HealthBenefitsPortal.http file included in the project)__:
+## 9. Explore the Application
 
-1. Run the end point "https://localhost:7129/api/users" to get the users' Ids.
-2. Run the end point "https://localhost:7129/api/users/assign-role" with each user Id to 
-   assign the roles as follows:
+You can explore the application's role-based functionality by logging in with one of the following accounts.:
 
-| User | Role |
-| ---- | ---- |
-| hr1@test.com | HR |
-| hr2@test.com | HR |
-| employee1@test.com | Employee |
-| employee2@test.com | Employee |
+| User | Role | Password |
+| ---- | ---- | -------- |
+|admin@mockdomain.com | Administrator | The password you configured on user secrets |
+| hr1@test.com | HR | Password123! |
+| hr2@test.com | HR | Password123! |
+| hr3@test.com | HR | Password123! |
+| employee1@test.com | Employee | Password123! |
+| employee2@test.com | Employee | Password123! |
+| employee3@test.com | Employee | Password123! |
+| employee4@test.com | Employee | Password123! |
+| employee5@test.com | Employee | Password123! |
 
-Optionally, by creating Employees and assigning them these users you will have additional functionality available in the application 
-i.e. seeing the name of the employee displayed in the Header after log in.
+> **Important:** Each Role has different access permissions and capabilities.
 
-1. Create an employee using the post endpoint "https://localhost:7129/api/employees"
-2. Assign the newly created employee one of the test users by opening the database with Microsoft SQL Server Management Studio and running
-the following SQL statement:
 
-```
-  UPDATE [HealthBenefits].[dbo].[Employees]
-  SET UserId = (SELECT Id FROM [HealthBenefits].[dbo].[IdentityUsers] AS iu WHERE iu.Email = 'test-user-emai')
-  WHERE Id = employee-Id
-```
+
 
 ---
 
