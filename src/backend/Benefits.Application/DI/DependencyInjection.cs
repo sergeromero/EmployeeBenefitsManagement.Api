@@ -1,5 +1,6 @@
 ﻿using Benefits.Application.Application.Contracts;
 using Benefits.Application.Behaviors;
+using Benefits.Application.DemoDataSeeder;
 using Benefits.Application.Services;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +28,8 @@ namespace Benefits.Application.DI
             services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyMarker).Assembly);
 
             services.AddScoped<IProvisioningService, ProvisioningService>();
+
+            services.AddScoped<IApplicationDataSeeder, ApplicationDataSeeder>();
 
             return services;
         }

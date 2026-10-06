@@ -49,6 +49,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 await app.InitializeInfrastructureAsync();
+await app.InitializeApplicationAsync();
 
 app.MapControllers();
 

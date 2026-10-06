@@ -7,5 +7,6 @@
         public const int Marketing = 3;
         public const int HumanResources = 4;
         public const int Sales = 5;
+        public const int IT = 6;
     }
 }

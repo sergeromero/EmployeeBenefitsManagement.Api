@@ -85,6 +85,7 @@ namespace Benefits.Infrastructure.Identity
                 ThrowIfFailed(addToRoleResult);
             }
         }
+
         private async Task InitializeTestUsers()
         {
             if (_seedOptions.Value.IncludeTestUsers)
@@ -92,7 +93,11 @@ namespace Benefits.Infrastructure.Identity
                 await EnsureUserAsync("hr1@test.com", "Password123!");
                 await EnsureUserAsync("hr2@test.com", "Password123!");
                 await EnsureUserAsync("employee1@test.com", "Password123!");
-                await EnsureUserAsync("employee2@test.com", "Password123!");
+                await EnsureUserAsync("employee2@test.com", "Password123!"); 
+                await EnsureUserAsync("hr3@test.com", "Password123!");
+                await EnsureUserAsync("employee3@test.com", "Password123!");
+                await EnsureUserAsync("employee4@test.com", "Password123!");
+                await EnsureUserAsync("employee5@test.com", "Password123!");
             }
         }
 
