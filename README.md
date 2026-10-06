@@ -122,8 +122,12 @@ The following users are created if they do not already exist (only in Developmen
 
 * hr1@test.com
 * hr2@test.com
+* hr3@test.com
 * employee1@test.com
 * employee2@test.com
+* employee3@test.com
+* employee4@test.com
+* employee5@test.com
 
 These users all have the same password: Password123!
 
