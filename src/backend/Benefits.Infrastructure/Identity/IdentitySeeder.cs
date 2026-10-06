@@ -1,4 +1,5 @@
-﻿using Benefits.Common;
+﻿using Benefits.Application.Exceptions;
+using Benefits.Common;
 using Benefits.Domain.Constants;
 using Benefits.Infrastructure.Configuration;
 using Benefits.Infrastructure.Configuration.Identity;
@@ -90,24 +91,39 @@ namespace Benefits.Infrastructure.Identity
         {
             if (_seedOptions.Value.IncludeTestUsers)
             {
-                await EnsureUserAsync("hr1@test.com", "Password123!");
-                await EnsureUserAsync("hr2@test.com", "Password123!");
-                await EnsureUserAsync("employee1@test.com", "Password123!");
-                await EnsureUserAsync("employee2@test.com", "Password123!"); 
-                await EnsureUserAsync("hr3@test.com", "Password123!");
-                await EnsureUserAsync("employee3@test.com", "Password123!");
-                await EnsureUserAsync("employee4@test.com", "Password123!");
-                await EnsureUserAsync("employee5@test.com", "Password123!");
+                var user = await EnsureUserAsync("hr1@test.com", "Password123!");
+                await EnsureUserInRole(user, Roles.HR);
+
+                user = await EnsureUserAsync("hr2@test.com", "Password123!");
+                await EnsureUserInRole(user, Roles.HR);
+
+                user = await EnsureUserAsync("employee1@test.com", "Password123!");
+                await EnsureUserInRole(user, Roles.Employee);
+
+                user = await EnsureUserAsync("employee2@test.com", "Password123!");
+                await EnsureUserInRole(user, Roles.Employee);
+
+                user = await EnsureUserAsync("hr3@test.com", "Password123!");
+                await EnsureUserInRole(user, Roles.HR);
+
+                user = await EnsureUserAsync("employee3@test.com", "Password123!");
+                await EnsureUserInRole(user, Roles.Employee);
+
+                user = await EnsureUserAsync("employee4@test.com", "Password123!");
+                await EnsureUserInRole(user, Roles.Employee);
+
+                user = await EnsureUserAsync("employee5@test.com", "Password123!");
+                await EnsureUserInRole(user, Roles.Employee);
             }
         }
 
-        private async Task EnsureUserAsync(string email, string password)
+        private async Task<ApplicationUser> EnsureUserAsync(string email, string password)
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
 
             if(existingUser != null)
             {
-                return;
+                return existingUser;
             }
 
             var user = new ApplicationUser
@@ -118,6 +134,24 @@ namespace Benefits.Infrastructure.Identity
             };
 
             var result = await _userManager.CreateAsync(user, password);
+            ThrowIfFailed(result);
+
+            return user;
+        }
+
+        private async Task EnsureUserInRole(ApplicationUser user, string role)
+        {
+            if (!await _roleManager.RoleExistsAsync(role))
+            {
+                throw new NotFoundException($"Role '{role}' was not found.");
+            }
+
+            if (await _userManager.IsInRoleAsync(user, role))
+            {
+                return;
+            }
+
+            var result = await _userManager.AddToRoleAsync(user, role);
             ThrowIfFailed(result);
         }
 
