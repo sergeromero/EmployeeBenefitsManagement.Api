@@ -13,5 +13,7 @@
   <Folder Name="/40.Infrastructure/">
     <Project Path="Benefits.Infrastructure/Benefits.Infrastructure.csproj" />
   </Folder>
-  <Folder Name="/90.Tests/" />
+  <Folder Name="/90.Tests/">
+    <Project Path="HealthBenefitsPortal.UnitTests/HealthBenefitsPortal.UnitTests.csproj" Id="0b8822c5-0873-4410-bb62-eea3cd305af1" />
+  </Folder>
 </Solution>
