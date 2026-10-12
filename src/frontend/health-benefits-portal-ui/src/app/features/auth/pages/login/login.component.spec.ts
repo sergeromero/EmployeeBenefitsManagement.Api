@@ -8,15 +8,18 @@ import { of } from 'rxjs';
 describe('AppLogin', () => {
     let component: AppLogin;
     let fixture: ComponentFixture<AppLogin>;
+    let login: ReturnType<typeof vi.fn>;
 
     beforeEach(async () => {
+        login = vi.fn();
+
         await TestBed.configureTestingModule({
             imports: [AppLogin],
             providers: [
                 {
                     provide: AuthApiService,
                     useValue: {
-                        login: vi.fn().mockReturnValue(of({}))
+                        login: login
                     }
                 },
                 {
@@ -41,6 +44,15 @@ describe('AppLogin', () => {
     });
 
   it('should create', () => {
+    login.mockReturnValue(of({}));
     expect(component).toBeTruthy();
   });
+
+  it("should mark all controls as touched and not attempt to login when the form is invalid", () => {
+    component.submit();
+
+    expect(component.form.controls.email.touched).toBe(true);
+    expect(component.form.controls.password.touched).toBe(true);
+    expect(login).toHaveBeenCalledTimes(0);
+  })
 });
