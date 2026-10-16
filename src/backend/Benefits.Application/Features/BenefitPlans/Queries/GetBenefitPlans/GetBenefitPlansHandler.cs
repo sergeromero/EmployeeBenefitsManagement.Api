@@ -24,9 +24,11 @@ namespace Benefits.Application.Features.BenefitPlans.Queries.GetBenefitPlans
                 .Select(bp => new BenefitPlanListItemDto(
                     bp.Id,
                     bp.Name,
+                    bp.Description,
                     new BenefitTypeDto(
                         bp.BenefitType.Id,
-                        bp.BenefitType.Name)))
+                        bp.BenefitType.Name),
+                    bp.EnrollmentCategory.Name))
                 .ToListAsync(cancellationToken);
         }
     }

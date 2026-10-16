@@ -2,7 +2,9 @@
 using Benefits.Application.Features.BenefitPlans.DeleteBenefitPlan;
 using Benefits.Application.Features.BenefitPlans.Queries.GetBenefitPlans;
 using Benefits.Common;
+using Benefits.Domain.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthBenefitsPortal.Controllers
@@ -19,6 +21,7 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
         public async Task<ActionResult<int>> Create(CreateBenefitPlansCommand command)
         {
             var benefitPlanId = await _mediator.Send(command);
@@ -33,6 +36,7 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR},{Roles.Employee}")]
         public async Task<ActionResult<List<BenefitPlanListItemDto>>> GetBenefitsPlans(CancellationToken cancellationToken)
         {
             var benefits = await _mediator.Send(new GetBenefitPlansQuery(), cancellationToken);
@@ -41,6 +45,7 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [HttpDelete("{id:int}")]
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
         public async Task<ActionResult> Delete(int id)
         {
             var command = new DeleteBenefitPlanCommand(id);

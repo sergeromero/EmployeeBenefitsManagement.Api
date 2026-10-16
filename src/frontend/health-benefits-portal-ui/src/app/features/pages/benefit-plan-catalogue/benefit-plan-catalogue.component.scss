@@ -1,0 +1,122 @@
+:host {
+    display: block;
+}
+
+.catalogue {
+    padding: 1.5rem;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.catalogue__header {
+    margin-bottom: 1.5rem;
+
+    h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+}
+
+.catalogue__description {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.catalogue__status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 240px;
+    padding: 2rem;
+    text-align: center;
+
+    h2,
+    p {
+        margin: 0;
+    }
+
+    p {
+        line-height: 1.6;
+        max-width: 560px;
+    }
+}
+
+.catalogue__status--error {
+    h2 {
+        font-size: 1.25rem;
+    }
+}
+
+.catalogue__grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 300px), 1fr)
+    );
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+.benefit-plan-card {
+    height: 100%;
+    box-sizing: border-box;
+
+    mat-card-header {
+        padding-bottom: 0.5rem;
+    }
+
+    mat-card-title {
+        font-size: 1.2rem;
+        line-height: 1.4;
+    }
+
+    mat-card-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        gap: 1.25rem;
+        padding-top: 0.75rem;
+    }
+}
+
+.benefit-plan-card__description {
+    margin: 0;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
+.benefit-plan-card__metadata {
+    display: grid;
+    gap: 1rem;
+    margin-top: auto;
+
+    > div {
+        display: grid;
+        gap: 0.25rem;
+    }
+}
+
+.metadata__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.metadata__value {
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .catalogue {
+        padding: 1rem;
+    }
+
+    .catalogue__header h1 {
+        font-size: 1.5rem;
+    }
+}

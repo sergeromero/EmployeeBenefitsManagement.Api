@@ -3,5 +3,7 @@
     public sealed record BenefitPlanListItemDto(
     int Id,
     string Name,
-    BenefitTypeDto BenefitType);
+    string Description,
+    BenefitTypeDto BenefitType,
+    string EnrollmentCategoryName);
 }

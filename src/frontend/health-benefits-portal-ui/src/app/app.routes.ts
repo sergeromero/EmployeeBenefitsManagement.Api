@@ -48,6 +48,12 @@ export const routes: Routes = [
                 ]
             },
             {
+                path: "benefits",
+                canActivate: [authGuard, roleGuard],
+                data: { roles: ["Administrator", "HR", "Employee"]},
+                loadComponent: () => import("./features/pages/benefit-plan-catalogue/benefit-plan-catalogue.component").then(m => m.BenefitPlanCatalogueComponent)
+            },
+            {
                 path: "unauthorized",
                 loadComponent: () => import("./features/pages/unauthorized/unauthorized.component").then(m => m.Unauthorized),
             },

@@ -1,0 +1,66 @@
+<main class="catalogue">
+    <header class="catalogue__header">
+        <div>
+            <h1>Available Benefit Plans</h1>
+
+            <p class="catalogue__description">
+                Explore the benefit plans available to you.
+            </p>
+        </div>
+    </header>
+
+    @if (isLoading()) {
+        <section class="catalogue__status" aria-live="polite" aria-label="Loading benefit plans">
+            <mat-spinner diameter="40" aria-label="Loading"></mat-spinner>
+            <p>Loading benefit plans ...</p>
+        </section>
+    } @else if (hasError()) {
+        <section class="catalogue__status catalogue__status--error" role="alert">
+            <h2>Unable to load benefit plans</h2>
+            <p>
+                We couldn't retrieve the available benefit plans.
+                Please try again.
+            </p>
+        </section>
+
+        <button mat-flat-button type="button" (click)="loadBenefitPlans()">
+            Try again
+        </button>
+    } @else if (benefitPlans().length == 0) {
+        <section class="catalogue__status" aria-live="polite">
+            <h2>No benefit plans available</h2>
+
+            <p>
+                There are currently no active benefit plans to display.
+                Please check again later.
+            </p>
+        </section>
+    } @else {
+        <section class="catalogue__grid" aria-label="Available benefit plans">
+            @for (plan of benefitPlans(); track plan.id) {
+                <mat-card class="benefit-plan-card">
+                    <mat-card-header>
+                        <mat-card-title>{{ plan.name }}</mat-card-title>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <p class="benefit-plan-card__description">
+                            {{ plan.description }}
+                        </p>
+
+                        <div class="benefit-plan-card__metadata">
+                            <div>
+                                <span class="metadata__label">Benefit type</span>
+                                <span class="metadata__value">{{ plan.benefitType.name }}</span>
+                            </div>
+                        </div>
+                        <div>
+                            <span class="metadata__label">Enrollment category</span>
+                            <span class="metadata__value">{{ plan.enrollmentCategoryName }}</span>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            }
+        </section>
+    }
+</main>
