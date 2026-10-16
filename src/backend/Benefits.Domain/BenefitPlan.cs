@@ -9,7 +9,7 @@
         public BenefitType BenefitType { get; set; } = null!;
         public int EnrollmentCategoryId { get; set; }
         public EnrollmentCategory EnrollmentCategory { get; set; } = null!;
-        public IReadOnlyCollection<EmployeeEnrollment> Enrollments { get; set; } = [];
+        public ICollection<EmployeeEnrollment> Enrollments { get; set; } = new List<EmployeeEnrollment>();
 
         public void Deactivate()
         {

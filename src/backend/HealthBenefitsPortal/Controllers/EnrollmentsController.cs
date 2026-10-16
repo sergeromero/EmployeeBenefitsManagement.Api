@@ -2,10 +2,12 @@
 using Benefits.Application.Features.Enrollments.TerminateEnrollment;
 using Benefits.Common;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthBenefitsPortal.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class EnrollmentsController : ControllerBase
@@ -18,17 +20,18 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Create(CreateEnrollmentCommand command, CancellationToken cancellationToken)
+        public async Task<ActionResult> Create([FromBody] CreateEnrollmentCommand command, CancellationToken cancellationToken)
         {
             await _mediator.Send(command, cancellationToken);
 
-            return CreatedAtAction(nameof(GetEnrollment),
-                new
-                {
-                    employeeId = command.EmployeeId,
-                    benefitPlanId = command.BenefitPlanId
-                },
-                null);
+            //return CreatedAtAction(nameof(GetEnrollment),
+            //    new
+            //    {
+            //        employeeId = command.EmployeeId,
+            //        benefitPlanId = command.BenefitPlanId
+            //    },
+            //    null);
+            return NoContent();
         }
 
         [HttpGet("employee/{employeeId:int}/benefit-plan/{benefitPlanId:int}")]
@@ -38,7 +41,7 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [HttpPost("terminate")]
-        public async Task<ActionResult> Terminate(TerminateEnrollmentCommand command, CancellationToken cancellationToken)
+        public async Task<ActionResult> Terminate([FromBody] TerminateEnrollmentCommand command, CancellationToken cancellationToken)
         {
             await _mediator.Send(command, cancellationToken);
 

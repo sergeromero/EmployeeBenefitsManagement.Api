@@ -111,6 +111,11 @@ namespace HealthBenefitsPortal.UnitTests.Application.Conventions
         {
             var parameterType = parameter.ParameterType;
 
+            if (parameterType == typeof(TimeProvider))
+            {
+                return TimeProvider.System;
+            }
+
             if (parameterType.IsInterface)
             {
                 return CreateMock(parameterType);

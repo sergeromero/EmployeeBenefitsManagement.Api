@@ -3,6 +3,6 @@
     public sealed class EnrollmentCategory : Entity
     {
         public string Name { get; set; } = null!;
-        public IReadOnlyCollection<BenefitPlan> BenefitPlans { get; set; } = [];
+        public ICollection<BenefitPlan> BenefitPlans { get; set; } = new List<BenefitPlan>();
     }
 }

@@ -1,0 +1,33 @@
+﻿using Benefits.Application.Exceptions;
+using Benefits.Application.Infrastructure.Contracts;
+using Benefits.Common;
+using MediatR;
+
+namespace Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits
+{
+    public sealed class GetMyEmployeeBenefitsHandler : GetEmployeeBenefitsHandlerBase, IRequestHandler<GetMyEmployeeBenefitsQuery, EmployeeBenefitsDto>
+    {
+        private readonly ICurrentUserService _currentUserService;
+
+        public GetMyEmployeeBenefitsHandler(IBenefitsDbContext dbContext, ICurrentUserService currentUserService) : base(dbContext)
+        {
+            _currentUserService = Guard.NotNull(currentUserService);
+        }
+
+        public async Task<EmployeeBenefitsDto> Handle(GetMyEmployeeBenefitsQuery request, CancellationToken cancellationToken)
+        {
+            var userId = _currentUserService.UserId;
+
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                throw new NotFoundException("No active employee record is linked to the authenticated user.");
+            }
+
+            var employeeQuery = _dbContext.Employees.Where(e => e.UserId == userId && e.IsActive);
+
+            var employeeBenefits = await GetEmployeeBenefitsAsync(employeeQuery, "No active employee record is linked to the authenticated user.", cancellationToken);
+
+            return employeeBenefits;
+        }
+    }
+}

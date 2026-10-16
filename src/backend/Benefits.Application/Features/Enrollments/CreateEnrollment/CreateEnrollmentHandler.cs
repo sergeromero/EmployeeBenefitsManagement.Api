@@ -10,24 +10,26 @@ namespace Benefits.Application.Features.Enrollments.CreateEnrollment
 {
     public class CreateEnrollmentHandler : IRequestHandler<CreateEnrollmentCommand, Unit>
     {
-        private sealed record Test();
-
         private readonly IBenefitsDbContext _dbContext;
+        private readonly ICurrentUserService _currentUserService;
         private readonly TimeProvider _timeProvider;
 
-        public CreateEnrollmentHandler(IBenefitsDbContext dbContext, TimeProvider timeProvider)
+        public CreateEnrollmentHandler(IBenefitsDbContext dbContext, ICurrentUserService currentUserService, TimeProvider timeProvider)
         {
             _dbContext = Guard.NotNull(dbContext);
             _timeProvider = Guard.NotNull(timeProvider);
+            _currentUserService = Guard.NotNull(currentUserService);
         }
 
         public async Task<Unit> Handle(CreateEnrollmentCommand request, CancellationToken cancellationToken)
         {
-            await ValidateRequest(request, cancellationToken);
+            var employeeId = await GetCurrentEmployeeId(cancellationToken);
+
+            await ValidateRequest(request, employeeId, cancellationToken);
 
             var newEnrollment = new EmployeeEnrollment
             {
-                EmployeeId = request.EmployeeId,
+                EmployeeId = employeeId,
                 BenefitPlanId = request.BenefitPlanId,
                 EnrollmentDate = request.EnrollmentDate
             };
@@ -38,10 +40,25 @@ namespace Benefits.Application.Features.Enrollments.CreateEnrollment
             return Unit.Value;
         }
 
-        private async Task ValidateRequest(CreateEnrollmentCommand request, CancellationToken cancellationToken)
+        private async Task<int> GetCurrentEmployeeId(CancellationToken cancellationToken)
         {
-            await EnsureEmployeeExists(request, cancellationToken);
+            var userId = _currentUserService.UserId;
 
+            if (string.IsNullOrWhiteSpace(userId))
+            {
+                throw new NotFoundException("No active employee record is linked to the authenticated user.");
+            }
+
+            var employeeId = await _dbContext.Employees
+                .Where(e => e.UserId == userId && e.IsActive)
+                .Select(e => (int?)e.Id)
+                .SingleOrDefaultAsync(cancellationToken);
+
+            return employeeId ?? throw new NotFoundException("No active employee record is linked to the authenticated user.");
+        }
+
+        private async Task ValidateRequest(CreateEnrollmentCommand request, int employeeId, CancellationToken cancellationToken)
+        {
             var benefitPlan = await _dbContext.BenefitPlans.Where(bp => bp.Id == request.BenefitPlanId && bp.IsActive)
                 .Select(bp => new
                 {
@@ -50,30 +67,22 @@ namespace Benefits.Application.Features.Enrollments.CreateEnrollment
                     bp.Name
                 })
                 .SingleOrDefaultAsync(cancellationToken) 
-                ?? throw new NotFoundException($"Benefit Plan with id {request.BenefitPlanId} was not found");
+                ?? throw new NotFoundException($"Benefit Plan with id {request.BenefitPlanId} was not found.");
 
-            await EnsureNonDuplicateEnrollment(request, benefitPlan.EnrollmentCategoryId, benefitPlan.Name, cancellationToken);
+            await EnsureNonDuplicateEnrollment(employeeId, benefitPlan.EnrollmentCategoryId, benefitPlan.Name, cancellationToken);
 
             EnsureValidDate(request.EnrollmentDate);
         }
 
-        private async Task EnsureEmployeeExists(CreateEnrollmentCommand request, CancellationToken cancellationToken)
+        private async Task EnsureNonDuplicateEnrollment(int employeeId, int enrollmentCategoryId, string benefitPlanName, CancellationToken cancellationToken)
         {
-            var employeeExists = await _dbContext.Employees.AnyAsync(e => e.Id == request.EmployeeId && e.IsActive, cancellationToken);
-            if (!employeeExists)
-            {
-                throw new NotFoundException($"Employee with id {request.EmployeeId} was not found");
-            }
-        }
-
-        private async Task EnsureNonDuplicateEnrollment(CreateEnrollmentCommand request, int enrollmentCategoryId, string benefitPlanName, CancellationToken cancellationToken)
-        {
-            var isAlreadyEnrolled = await _dbContext.EmployeeEnrollments.AnyAsync(ee => ee.EmployeeId == request.EmployeeId
-                        && ee.BenefitPlan.EnrollmentCategoryId == enrollmentCategoryId, cancellationToken);
+            var isAlreadyEnrolled = await _dbContext.EmployeeEnrollments.AnyAsync(ee => ee.EmployeeId == employeeId
+                        && ee.BenefitPlan.EnrollmentCategoryId == enrollmentCategoryId
+                        && ee.EndDate == null, cancellationToken);
 
             if (isAlreadyEnrolled)
             {
-                throw new BusinessRuleException($"Employee cannot be enrolled in benefit plan {benefitPlanName} because they already have an enrollment in the same enrollment category.");
+                throw new BusinessRuleException($"You cannot be enrolled in benefit plan {benefitPlanName} because you already have an enrollment in the same enrollment category.");
             }
         }
 

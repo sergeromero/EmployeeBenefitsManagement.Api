@@ -92,13 +92,22 @@ namespace HealthBenefitsPortal.Controllers
             return NoContent();
         }
 
-        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR},{Roles.Employee}")]
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
         [HttpGet("{id:int}/benefits")]
         public async Task<ActionResult<EmployeeBenefitsDto>> GetEmployeeBenefits(int id, CancellationToken cancellationToken)
         {
             var employeeEnrollments = await _mediator.Send(new GetEmployeeBenefitsQuery(id), cancellationToken);
 
             return Ok(employeeEnrollments);
+        }
+
+        [Authorize(Roles = $"{Roles.Administrator},{Roles.HR},{Roles.Employee}")]
+        [HttpGet("benefits")]
+        public async Task<ActionResult<EmployeeBenefitsDto>> GetMyBenefits(CancellationToken cancellationToken)
+        {
+            var employeeBenefits = await _mediator.Send(new GetMyEmployeeBenefitsQuery(), cancellationToken);
+
+            return Ok(employeeBenefits);
         }
 
         [Authorize(Roles = Roles.Administrator)]

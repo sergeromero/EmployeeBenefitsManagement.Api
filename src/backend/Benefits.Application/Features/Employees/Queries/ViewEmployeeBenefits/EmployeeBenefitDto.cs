@@ -3,5 +3,8 @@
     public sealed record EmployeeBenefitDto(
         int BenefitPlanId,
         string BenefitPlan,
-        string BenefitType);
+        string BenefitType,
+        DateOnly EnrollmentDate,
+        DateOnly? EndDate,
+        bool IsActive);
 }

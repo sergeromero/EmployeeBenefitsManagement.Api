@@ -6,9 +6,6 @@ namespace Benefits.Application.Features.Enrollments.TerminateEnrollment
     {
         public TerminateEnrollmentValidator()
         {
-            RuleFor(x => x.EmployeeId)
-                .GreaterThan(0);
-
             RuleFor(x => x.BenefitPlanId)
                 .GreaterThan(0);
 

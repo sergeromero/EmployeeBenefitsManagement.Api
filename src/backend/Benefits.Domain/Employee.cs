@@ -10,7 +10,7 @@
         public int DepartmentId {  get; set; }
         public Department Department { get; set; } = null!;
         public bool IsActive { get; set; } = true;
-        public IReadOnlyCollection<EmployeeEnrollment> Enrollments { get; set; } = [];
+        public ICollection<EmployeeEnrollment> Enrollments { get; set; } = new List<EmployeeEnrollment>();
 
         public string? UserId { get; set; } = null!;
 
