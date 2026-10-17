@@ -10,9 +10,9 @@ export const LANDING_ACTIONS: LandingAction[] = [
     },
     {
         id: "enroll-benefits",
-        label: "Enroll in Benefits",
-        description: "Manage your benefit enrollments.",
-        route: "/enrollments",
+        label: "My enrollments",
+        description: "Manage your current benefit enrollments.",
+        route: "employees/my/enrollments",
         roles: ["Administrator", "Employee", "HR"]
     },
     {

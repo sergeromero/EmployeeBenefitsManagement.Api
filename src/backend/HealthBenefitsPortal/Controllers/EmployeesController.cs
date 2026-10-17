@@ -93,7 +93,7 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [Authorize(Roles = $"{Roles.Administrator},{Roles.HR}")]
-        [HttpGet("{id:int}/benefits")]
+        [HttpGet("{id:int}/enrollments")]
         public async Task<ActionResult<EmployeeBenefitsDto>> GetEmployeeBenefits(int id, CancellationToken cancellationToken)
         {
             var employeeEnrollments = await _mediator.Send(new GetEmployeeBenefitsQuery(id), cancellationToken);
@@ -102,8 +102,8 @@ namespace HealthBenefitsPortal.Controllers
         }
 
         [Authorize(Roles = $"{Roles.Administrator},{Roles.HR},{Roles.Employee}")]
-        [HttpGet("benefits")]
-        public async Task<ActionResult<EmployeeBenefitsDto>> GetMyBenefits(CancellationToken cancellationToken)
+        [HttpGet("enrollments")]
+        public async Task<ActionResult<IReadOnlyList<EmployeeBenefitDto>>> GetMyBenefits(CancellationToken cancellationToken)
         {
             var employeeBenefits = await _mediator.Send(new GetMyEmployeeBenefitsQuery(), cancellationToken);
 

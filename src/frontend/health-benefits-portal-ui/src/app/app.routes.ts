@@ -48,6 +48,12 @@ export const routes: Routes = [
                 ]
             },
             {
+                path: "employees/my/enrollments",
+                canActivate: [authGuard, roleGuard],
+                data: { roles: ["Administrator", "HR", "Employee"]},
+                loadComponent: () => import("./features/pages/my-enrollments/my-enrollments.component").then(m => m.MyEnrollmentsComponent)
+            },
+            {
                 path: "benefits",
                 canActivate: [authGuard, roleGuard],
                 data: { roles: ["Administrator", "HR", "Employee"]},

@@ -1,0 +1,130 @@
+:host {
+    display: block;
+}
+
+.my-enrollments {
+    padding: 1.5rem;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.my-enrollments__header {
+    margin-bottom: 2rem;
+
+    h1 {
+        margin: 0 0 0.5rem;
+        font-size: 1.75rem;
+        font-weight: 600;
+    }
+}
+
+.my-enrollments__description {
+    margin: 0;
+    line-height: 1.5;
+}
+
+.my-enrollments__section {
+    margin-bottom: 2.5rem;
+
+    > h2 {
+        margin: 0 0 1.25rem;
+        font-size: 1.35rem;
+        font-weight: 600;
+    }
+}
+
+.my-enrollments__grid {
+    display: grid;
+    grid-template-columns: repeat(
+        auto-fit,
+        minmax(min(100%, 300px), 1fr)
+    );
+    gap: 1.25rem;
+    align-items: stretch;
+}
+
+.my-enrollments__status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    min-height: 240px;
+    padding: 2rem;
+    text-align: center;
+
+    h2,
+    p {
+        margin: 0;
+    }
+
+    p {
+        max-width: 560px;
+        line-height: 1.6;
+    }
+}
+
+.my-enrollments__status--error {
+    h2 {
+        font-size: 1.25rem;
+    }
+}
+
+.enrollment-card {
+    height: 100%;
+    box-sizing: border-box;
+
+    mat-card-header {
+        padding-bottom: 0.5rem;
+    }
+
+    mat-card-title {
+        font-size: 1.2rem;
+        line-height: 1.4;
+        overflow-wrap: anywhere;
+    }
+
+    mat-card-content {
+        padding-top: 0.75rem;
+    }
+}
+
+.enrollment-card--historical {
+    opacity: 0.85;
+}
+
+.enrollment-card__metadata {
+    display: grid;
+    gap: 1rem;
+
+    > div {
+        display: grid;
+        gap: 0.25rem;
+    }
+}
+
+.enrollment-card__status {
+    font-weight: 600;
+}
+
+.metadata__label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.metadata__value {
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+@media (max-width: 600px) {
+    .my-enrollments {
+        padding: 1rem;
+    }
+
+    .my-enrollments__header h1 {
+        font-size: 1.5rem;
+    }
+}

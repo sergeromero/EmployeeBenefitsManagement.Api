@@ -76,14 +76,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
 
             var result = await handler.Handle(new GetMyEmployeeBenefitsQuery(), CancellationToken.None);
 
-            result.Id.Should().Be(employee.Id);
-            result.FirstName.Should().Be(employee.FirstName);
-            result.LastName.Should().Be(employee.LastName);
-            result.Department.Should().Be(department.Name);
-
-            result.Benefits.Should().ContainSingle();
-
-            var returnedBenefit = result.Benefits[0];
+            var returnedBenefit = result[0];
 
             returnedBenefit.BenefitPlanId.Should().Be(benefitPlan.Id);
             returnedBenefit.BenefitPlan.Should().Be(benefitPlan.Name);
@@ -92,9 +85,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
             returnedBenefit.EndDate.Should().BeNull();
             returnedBenefit.IsActive.Should().BeTrue();
 
-            currentUserService.VerifyGet(
-                service => service.UserId,
-                Times.Once);
+            currentUserService.VerifyGet(service => service.UserId, Times.Once);
         }
 
         [Fact]
@@ -160,6 +151,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
             const string otherUserId = "user-456";
 
             var department = new Department { Id = 1, Name = "Engineering" };
+            var benefitType = new BenefitType { Id = 1, Name = "Health" };
 
             var currentEmployee = new Employee
             {
@@ -175,6 +167,23 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
                 IsActive = true
             };
 
+            var enrollmentForCurrentEmployee = new EmployeeEnrollment
+            {
+                EmployeeId = currentEmployee.Id,
+                BenefitPlanId = 5,
+                EnrollmentDate = new DateOnly(2025, 6, 6),
+                Employee = currentEmployee,
+                BenefitPlan = new BenefitPlan 
+                { 
+                    Id = 5, 
+                    Name = "Plan Five", 
+                    Description = "Plan Five", 
+                    BenefitType = benefitType, 
+                    BenefitTypeId = benefitType.Id 
+                },
+            };
+            currentEmployee.Enrollments.Add(enrollmentForCurrentEmployee);
+
             var otherEmployee = new Employee
             {
                 Id = 300,
@@ -189,6 +198,23 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
                 IsActive = true
             };
 
+            var enrollmentForOtherEmployee = new EmployeeEnrollment
+            {
+                EmployeeId = otherEmployee.Id,
+                BenefitPlanId = 8,
+                EnrollmentDate = new DateOnly(2025, 6, 6),
+                Employee = otherEmployee,
+                BenefitPlan = new BenefitPlan 
+                { 
+                    Id = 8, 
+                    Name = "Plan Eight", 
+                    Description = "Plan Eight", 
+                    BenefitType = benefitType, 
+                    BenefitTypeId = benefitType.Id 
+                }
+            };
+            otherEmployee.Enrollments.Add(enrollmentForOtherEmployee);
+
             var currentUserService = new Mock<ICurrentUserService>();
             currentUserService.Setup(service => service.UserId).Returns(currentUserId);
 
@@ -199,11 +225,10 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
 
             var result = await handler.Handle(new GetMyEmployeeBenefitsQuery(), CancellationToken.None);
 
-            result.Id.Should().Be(currentEmployee.Id);
-            result.FirstName.Should().Be(currentEmployee.FirstName);
-            result.LastName.Should().Be(currentEmployee.LastName);
-
-            result.Id.Should().NotBe(otherEmployee.Id);
+            result.Count().Should().Be(1);
+            result[0].BenefitPlanId.Should().Be(5);
+            result[0].BenefitPlan.Should().Be("Plan Five");
+            result[0].BenefitType.Should().Be("Health");
         }
     }
 }

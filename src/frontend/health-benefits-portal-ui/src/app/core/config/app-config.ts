@@ -5,4 +5,5 @@ export interface AppConfig {
     benefitsUrl: string;
     rolesUrl: string;
     benefitPlansUrl: string;
+    myEnrollmentsUrl: string;
 } 

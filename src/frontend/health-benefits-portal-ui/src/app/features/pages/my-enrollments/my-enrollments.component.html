@@ -1,0 +1,105 @@
+<main class="my-enrollments">
+    <header class="my-enrollments__header">
+        <div>
+            <h1>My Benefit Enrollments</h1>
+
+            <p class="my-enrollments__description">
+                View your active benefits and enrollment history.
+            </p>
+        </div>
+    </header>
+
+    @if (isLoading()) {
+        <section class="my-enrollments__status" aria-live="polite" aria-label="Loading your enrollments">
+            <mat-spinner diameter="40" aria-label="Loading"></mat-spinner>
+            <p>Loading your enrollments ...</p>
+        </section>
+    } @else if (hasError()) {
+        <section class="my-enrollments__status my-enrollments__status--error" role="alert">
+            <h2>Unable to load your benefit enrollments</h2>
+
+            <p>
+                We couldn't retrieve your benefit enrollments.
+                Please try again.
+            </p>
+
+            <button mat-flat-button type="button" (click)="loadBenefits()">
+                Try again
+            </button>
+        </section>
+    } @else if (enrollments().length === 0) {
+        <section class="my-benefits__status" aria-live="polite">
+            <h2>No benefits found</h2>
+
+            <p>
+                You don't currently have any benefit enrollments.
+                Available plans can be explored in the benefit catalogue.
+            </p>
+        </section>
+    } @else if (enrollments().length > 0) {
+        <section class="my-enrollments__section" aria-labelledby="active-enrollments-heading">
+            <h2 id="active-enrollments-heading">Active Enrollments</h2>
+
+            <div class="my-enrollments__grid">
+                @for (enrollment of activeEnrollments(); track enrollment.benefitPlanId) {
+                    <mat-card class="enrollment-card">
+                        <mat-card-header>
+                            <mat-card-title>{{ enrollment.benefitPlan }}</mat-card-title>
+                            <mat-card-subtitle>{{ enrollment.benefitType }}</mat-card-subtitle>
+                        </mat-card-header>
+                        <mat-card-content>
+                            <div class="enrollment-card__metadata">
+                                <div>
+                                    <span class="metadata__label">Status</span>
+                                    <span class="metadata__value enrollment-card__status">Active</span>
+                                </div>
+                                <div>
+                                    <span class="metadata__label">Enrollment date</span>
+                                    <span class="metadata__value">{{ enrollment.enrollmentDate | date:"mediumDate":"UTC" }}</span>
+                                </div>
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                }
+            </div>
+        </section>
+        @if (enrollmentHistory().length > 0) {
+            <section class="my-enrollments__section" aria-labelledby="enrollment-history-heading">
+                <h2 id="enrollment-history-heading">Enrollment History</h2>
+
+                <div class="my-enrollments__grid">
+                    @for (enrollment of enrollmentHistory(); track enrollment.benefitPlanId) {
+                        <mat-card class="enrollment-card enrollment-card--historical">
+                            <mat-card-header>
+                                <mat-card-title>{{ enrollment.benefitPlan }}</mat-card-title>
+                                <mat-card-subtitle>{{ enrollment.benefitType }}</mat-card-subtitle>
+                            </mat-card-header>
+                            <mat-card-content>
+                                <div class="enrollment-card__metadata">
+                                    <div>
+                                        <span class="metadata__label">Status</span>
+                                        <span class="metadata__value">Historical</span>
+                                    </div>
+                                    <div>
+                                        <span class="metadata__label">Enrollment date</span>
+                                        <span class="metadata__value">{{ enrollment.enrollmentDate | date:"mediumDate":"UTC" }}</span>
+                                    </div>
+                                    <div>
+                                        <span class="metadata__label">End date</span>
+                                        <span class="metadata__value">
+                                            @if (enrollment.endDate) {
+                                                {{ enrollment.endDate | date:"mediumDate":"UTC" }}
+                                            } @else {
+                                                Not available
+                                            }
+                                        </span>
+                                    </div>
+                                </div>
+                            </mat-card-content>
+                        </mat-card>                        
+                    }
+                </div>
+            </section>
+        }
+    }
+</main>

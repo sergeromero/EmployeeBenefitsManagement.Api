@@ -5,7 +5,7 @@ using MediatR;
 
 namespace Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits
 {
-    public sealed class GetMyEmployeeBenefitsHandler : GetEmployeeBenefitsHandlerBase, IRequestHandler<GetMyEmployeeBenefitsQuery, EmployeeBenefitsDto>
+    public sealed class GetMyEmployeeBenefitsHandler : GetEmployeeBenefitsHandlerBase, IRequestHandler<GetMyEmployeeBenefitsQuery, IReadOnlyList<EmployeeBenefitDto>>
     {
         private readonly ICurrentUserService _currentUserService;
 
@@ -14,7 +14,7 @@ namespace Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits
             _currentUserService = Guard.NotNull(currentUserService);
         }
 
-        public async Task<EmployeeBenefitsDto> Handle(GetMyEmployeeBenefitsQuery request, CancellationToken cancellationToken)
+        public async Task<IReadOnlyList<EmployeeBenefitDto>> Handle(GetMyEmployeeBenefitsQuery request, CancellationToken cancellationToken)
         {
             var userId = _currentUserService.UserId;
 
@@ -25,7 +25,7 @@ namespace Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits
 
             var employeeQuery = _dbContext.Employees.Where(e => e.UserId == userId && e.IsActive);
 
-            var employeeBenefits = await GetEmployeeBenefitsAsync(employeeQuery, "No active employee record is linked to the authenticated user.", cancellationToken);
+            var employeeBenefits = await GetEmployeeBenefitListAsync(employeeQuery, "No active employee record is linked to the authenticated user.", cancellationToken);
 
             return employeeBenefits;
         }
