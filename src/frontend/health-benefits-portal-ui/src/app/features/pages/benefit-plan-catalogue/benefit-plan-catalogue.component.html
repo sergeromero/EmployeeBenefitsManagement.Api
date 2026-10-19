@@ -58,6 +58,21 @@
                             <span class="metadata__label">Enrollment category</span>
                             <span class="metadata__value">{{ plan.enrollmentCategoryName }}</span>
                         </div>
+
+                        <div class="benefit-plan-card__actions">
+                            <button 
+                                mat-flat-button 
+                                type="button" 
+                                [disabled]="isSubmitting()"
+                                [attr.aria-busy]="submittingPlanId() === plan.id"
+                                (click)="enroll(plan)">
+                                @if (submittingPlanId() === plan.id) {
+                                    Submitting ...
+                                } @else {                                        
+                                    Enroll
+                                }
+                            </button>
+                        </div>
                     </mat-card-content>
                 </mat-card>
             }

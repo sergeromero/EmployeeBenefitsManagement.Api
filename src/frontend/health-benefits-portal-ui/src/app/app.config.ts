@@ -23,7 +23,8 @@ export const appConfig: ApplicationConfig = {
         benefitsUrl: "benefits",
         rolesUrl: "roles",
         benefitPlansUrl: "benefitplans",
-        myEnrollmentsUrl: "employees/enrollments"
+        myEnrollmentsUrl: "employees/enrollments",
+        enrollmentsUrl: "enrollments"
       }
     },
     {

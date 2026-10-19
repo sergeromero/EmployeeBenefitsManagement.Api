@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Confirm Benefit Enrollment</h2>
+
+<mat-dialog-content>
+    <p>
+        You are about to enroll in the following benefit plan:
+    </p>
+
+    <section class="enrollment-summary" aria-label="Selected benefit plan">
+        <h3 class="enrollment-summary__name">{{ plan.name }}</h3>
+        <p class="enrollment-summary__description">{{ plan.description }}</p>
+
+        <dl class="enrollment-summary__details">
+            <div>
+                <dt>Benefit type</dt>
+                <dd>{{ plan.benefitType.name }}</dd>
+            </div>
+            <div>
+                <dt>Enrollment category</dt>
+                <dd>{{ plan.enrollmentCategoryName }}</dd>
+            </div>
+        </dl>
+    </section>
+
+    <p>
+        Would you like to proceede with this enrollment?
+    </p>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button type="button" (click)="confirm()">Confirm enrollment</button>
+</mat-dialog-actions>

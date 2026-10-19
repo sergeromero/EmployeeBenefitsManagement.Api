@@ -3,6 +3,7 @@ import { Observable } from "rxjs";
 import { APP_CONFIG } from "@core/config/app-config.token";
 import { EmployeeBenefitDto } from "@core/contracts/employee/employee-benefit.dto";
 import { ApiClientService } from "../base/api-client.service";
+import { CreateEnrollmentRequest } from "@core/contracts/enrollment/create-enrollment.request";
 
 @Injectable({
     providedIn: "root"
@@ -13,5 +14,9 @@ export class EmployeeEnrollmentsApiService {
 
     getMyEnrollments(): Observable<EmployeeBenefitDto[]> {
         return this.api.get<EmployeeBenefitDto[]>(this.appConfig.myEnrollmentsUrl);
+    }
+
+    create(request: CreateEnrollmentRequest): Observable<void> {
+        return this.api.post<CreateEnrollmentRequest, void>(this.appConfig.enrollmentsUrl, request);
     }
 }

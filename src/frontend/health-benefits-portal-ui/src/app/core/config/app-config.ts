@@ -6,4 +6,5 @@ export interface AppConfig {
     rolesUrl: string;
     benefitPlansUrl: string;
     myEnrollmentsUrl: string;
+    enrollmentsUrl: string;
 } 
