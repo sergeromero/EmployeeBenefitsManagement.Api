@@ -3,6 +3,7 @@ export type ErrorType =
   | 'Unauthorized'
   | 'Forbidden'
   | 'NotFound'
+  | 'Conflict'
   | 'Server'
   | 'Unknown';
 

@@ -35,6 +35,12 @@ export function mapHttpError(error: HttpErrorResponse): AppError {
                 message: "Resource not found.",
                 statusCode: 404
             }
+        case 409:
+            return {
+                type: "Conflict",
+                message: extractProblemDetailsDetail(error) ?? "The requested operation conflicts with the current state.",
+                statusCode: 409
+            }
         case 500:
             return {
                 type: "Server",
@@ -50,9 +56,30 @@ export function mapHttpError(error: HttpErrorResponse): AppError {
     }
 }
 
-function extractValidationErrors(error: HttpErrorResponse): string[] {
-    if (error.error?.errors) {
-        return (Object.values(error.error.errors) as string[][]).flat();
+function extractProblemDetailsDetail(error: HttpErrorResponse): string | null {
+    const body: unknown = error.error;
+
+    if (typeof body !== "object" || body === null || !("detail" in body)) {
+        return null;
     }
-    return [];
+
+    const detail = body.detail;
+
+    return typeof detail === "string" && detail.trim().length > 0 ? detail : null;
+}
+
+function extractValidationErrors(error: HttpErrorResponse): string[] {
+    const body: unknown = error.error;
+
+    if (typeof body !== "object" || body === null || !("errors" in body)) {
+        return [];
+    }
+     const errors = body.errors;
+
+    if (typeof errors !== "object" || errors === null) {
+        return [];
+    }
+
+    return Object.values(errors).filter((value): value is string[] =>
+        Array.isArray(value) && value.every((item): item is string => typeof item === "string")).flat();
 }
