@@ -5,5 +5,6 @@
     string Name,
     string Description,
     BenefitTypeDto BenefitType,
-    string EnrollmentCategoryName);
+    string EnrollmentCategoryName,
+    EnrollmentEligibilityDto EnrollmentEligibility);
 }

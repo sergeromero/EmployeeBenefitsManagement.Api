@@ -38,7 +38,8 @@
     } @else {
         <section class="catalogue__grid" aria-label="Available benefit plans">
             @for (plan of benefitPlans(); track plan.id) {
-                <mat-card class="benefit-plan-card">
+                <mat-card class="benefit-plan-card"
+                    [class.benefit-plan-card--ineligible]="!plan.enrollmentEligibility.canEnroll">
                     <mat-card-header>
                         <mat-card-title>{{ plan.name }}</mat-card-title>
                     </mat-card-header>
@@ -59,11 +60,21 @@
                             <span class="metadata__value">{{ plan.enrollmentCategoryName }}</span>
                         </div>
 
+                        @if (!plan.enrollmentEligibility.canEnroll) {
+                            <p class="benefit-plan-card__eligibility" role="status">
+                                @if (plan.enrollmentEligibility.reason === "AlreadyEnrolledInBenefit") {
+                                    You are already enrolled in this benefit
+                                } @else if (plan.enrollmentEligibility.reason === "AlreadyEnrolledInCategory") {
+                                    You are already enrolled in a benefit from this category
+                                }
+                            </p>
+                        }
+
                         <div class="benefit-plan-card__actions">
                             <button 
                                 mat-flat-button 
                                 type="button" 
-                                [disabled]="isSubmitting()"
+                                [disabled]="isSubmitting() || !plan.enrollmentEligibility.canEnroll"
                                 [attr.aria-busy]="submittingPlanId() === plan.id"
                                 (click)="enroll(plan)">
                                 @if (submittingPlanId() === plan.id) {

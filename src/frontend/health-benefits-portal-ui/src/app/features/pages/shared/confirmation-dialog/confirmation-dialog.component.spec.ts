@@ -18,7 +18,11 @@ describe('ConfirmationDialogComponent', () => {
       id: 1,
       name: 'Health'
     },
-    enrollmentCategoryName: 'Health Benefits'
+    enrollmentCategoryName: 'Health Benefits',
+    enrollmentEligibility: {
+      canEnroll: true,
+      reason: null
+    }
   };  
 
   function createComponent(): void {

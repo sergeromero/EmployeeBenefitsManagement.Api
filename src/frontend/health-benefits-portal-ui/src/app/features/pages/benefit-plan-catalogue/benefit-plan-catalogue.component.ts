@@ -60,7 +60,7 @@ export class BenefitPlanCatalogueComponent {
   }
 
   enroll(plan: BenefitPlanListItemDto): void {
-    if (this.isSubmitting()) {
+    if (this.isSubmitting() || !plan.enrollmentEligibility.canEnroll) {
       return;
     }
 

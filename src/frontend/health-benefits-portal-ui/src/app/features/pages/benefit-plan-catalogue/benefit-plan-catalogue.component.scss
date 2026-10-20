@@ -120,3 +120,13 @@
         font-size: 1.5rem;
     }
 }
+
+.benefit-plan-card--ineligible {
+    border: 2px solid var(--mat-sys-error, #ba1a1a);
+}
+
+.benefit-plan-card__eligibility {
+    margin: 1rem 0 0;
+    color: var(--mat-sys-error, #ba1a1a);
+    font-weight: 600;
+}

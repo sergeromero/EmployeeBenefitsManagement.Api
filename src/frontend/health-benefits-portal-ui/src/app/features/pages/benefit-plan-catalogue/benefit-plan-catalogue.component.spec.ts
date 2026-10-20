@@ -41,7 +41,11 @@ describe('BenefitPlanCatalogueComponent', () => {
           id: 1,
           name: "Health"
       },
-      enrollmentCategoryName: "Health Benefits"
+      enrollmentCategoryName: "Health Benefits",
+      enrollmentEligibility: {
+        canEnroll: true,
+        reason: null
+      }
     },
     {
       id: 2,
@@ -51,7 +55,11 @@ describe('BenefitPlanCatalogueComponent', () => {
           id: 2,
           name: "Dental"
       },
-      enrollmentCategoryName: "Health Benefits"
+      enrollmentCategoryName: "Health Benefits",
+      enrollmentEligibility: {
+        canEnroll: true,
+        reason: null
+      }
     }    
   ];
 
@@ -345,5 +353,88 @@ describe('BenefitPlanCatalogueComponent', () => {
     );
 
     expect(buttons.every(button => !button.disabled)).toBe(true);
+  });  
+
+  it("should allow enrollment when the plan is eligible", () => {
+      getAll.mockReturnValue(of([
+          {
+              ...plans[0],
+              enrollmentEligibility: {
+                  canEnroll: true,
+                  reason: null
+              }
+          }
+      ]));
+
+      createComponent();
+
+      const card = fixture.nativeElement.querySelector("mat-card") as HTMLElement;
+      const enrollButton = card.querySelector("button") as HTMLButtonElement;
+
+      expect(card.classList.contains("benefit-plan-card--ineligible")).toBe(false);
+      expect(card.textContent).not.toContain("Already enrolled in benefit");
+      expect(card.textContent).not.toContain("Already enrolled in category");
+      expect(enrollButton.disabled).toBe(false);
+  });
+
+  it("should indicate when the employee is already enrolled in the benefit", () => {
+      getAll.mockReturnValue(of([
+          {
+              ...plans[0],
+              enrollmentEligibility: {
+                  canEnroll: false,
+                  reason: "AlreadyEnrolledInBenefit"
+              }
+          }
+      ]));
+
+      createComponent();
+
+      const card = fixture.nativeElement.querySelector("mat-card") as HTMLElement;
+      const enrollButton = card.querySelector("button") as HTMLButtonElement;
+
+      expect(card.classList.contains("benefit-plan-card--ineligible")).toBe(true);
+      expect(card.textContent).toContain("You are already enrolled in this benefit");
+      expect(enrollButton.disabled).toBe(true);
+  });
+
+  it("should indicate when the employee is already enrolled in the category", () => {
+      getAll.mockReturnValue(of([
+          {
+              ...plans[0],
+              enrollmentEligibility: {
+                  canEnroll: false,
+                  reason: "AlreadyEnrolledInCategory"
+              }
+          }
+      ]));
+
+      createComponent();
+
+      const card = fixture.nativeElement.querySelector("mat-card") as HTMLElement;
+      const enrollButton = card.querySelector("button") as HTMLButtonElement;
+
+      expect(card.classList.contains("benefit-plan-card--ineligible")).toBe(true);
+      expect(card.textContent).toContain("You are already enrolled in a benefit from this category");
+      expect(enrollButton.disabled).toBe(true);
+  });  
+
+  it("should not open the confirmation dialog for an ineligible plan", () => {
+      getAll.mockReturnValue(of([
+          {
+              ...plans[0],
+              enrollmentEligibility: {
+                  canEnroll: false,
+                  reason: "AlreadyEnrolledInBenefit"
+              }
+          }
+      ]));
+
+      createComponent();
+
+      component.enroll(component.benefitPlans()[0]);
+
+      expect(openDialog).not.toHaveBeenCalled();
+      expect(createEnrollment).not.toHaveBeenCalled();
   });  
 });
