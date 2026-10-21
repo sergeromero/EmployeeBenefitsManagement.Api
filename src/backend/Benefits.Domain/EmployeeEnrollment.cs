@@ -9,7 +9,7 @@
         public Employee Employee { get; set; } = null!;
         public BenefitPlan BenefitPlan { get; set; } = null!;
 
-        public bool IsActive => EndDate is null;
+        public bool IsActiveOn(DateOnly date) => EndDate is null || EndDate >= date;
 
         public void EndEnrollment(DateOnly endDate)
         {

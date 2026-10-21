@@ -4,6 +4,7 @@ using Benefits.Domain;
 using FluentAssertions;
 using HealthBenefitsPortal.UnitTests.Application.Common;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 
 namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.ViewEmployeeBenefits
 {
@@ -22,6 +23,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
         public async Task Handle_WhenActiveEmployeeHasEnrollments_ReturnsEmployeeAndBenefitDetails()
         {
             await using var dbContext = new TestDbContext(_options);
+            var timeProvider = new Mock<TimeProvider>();
 
             var department = new Department { Id = 1, Name = "Engineering" };
             var benefitType = new BenefitType { Id = 1, Name = "Health" };
@@ -66,7 +68,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
             await dbContext.Employees.AddAsync(employee, CancellationToken.None);
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetEmployeeBenefitsHandler(dbContext);
+            var handler = new GetEmployeeBenefitsHandler(dbContext, timeProvider.Object);
 
             var query = new GetEmployeeBenefitsQuery(employee.Id);
 
@@ -94,10 +96,11 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
         public async Task Handle_WhenEmployeeDoesNotExist_ThrowsNotFoundException()
         {
             await using var dbContext = new TestDbContext(_options);
+            var timeProvider = new Mock<TimeProvider>();
 
             const int anyNonExistentEmployeeId = 9999;
 
-            var handler = new GetEmployeeBenefitsHandler(dbContext);
+            var handler = new GetEmployeeBenefitsHandler(dbContext, timeProvider.Object);
             var query = new GetEmployeeBenefitsQuery(anyNonExistentEmployeeId);
 
             Func<Task> act = () => handler.Handle(query, CancellationToken.None);
@@ -111,6 +114,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
         public async Task Handle_WhenEmployeeIsInactive_ThrowsNotFoundException()
         {
             await using var dbContext = new TestDbContext(_options);
+            var timeProvider = new Mock<TimeProvider>();
 
             var department = new Department { Id = 1, Name = "Engineering" };
 
@@ -130,7 +134,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
             await dbContext.Employees.AddAsync(employee, CancellationToken.None);
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetEmployeeBenefitsHandler(dbContext);
+            var handler = new GetEmployeeBenefitsHandler(dbContext, timeProvider.Object);
             var query = new GetEmployeeBenefitsQuery(employee.Id);
 
             Func<Task> act = () => handler.Handle(query, CancellationToken.None);
@@ -143,7 +147,13 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
         [Fact]
         public async Task Handle_WhenEmployeeHasTerminatedEnrolments_ReturnsEnrollmentHistory()
         {
+            var currentDate = new DateTime(2026, 09, 09);
+            var benefitTermationDate = new DateOnly(2026, 5, 5);
+
             await using var dbContext = new TestDbContext(_options);
+            var timeProvider = new Mock<TimeProvider>();
+
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(currentDate);
 
             var department = new Department { Id = 1, Name = "Engineering" };
             var benefitType = new BenefitType { Id = 1, Name = "Health" };
@@ -183,14 +193,14 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
                 BenefitPlan = benefitPlan
             };
 
-            enrollment.EndEnrollment(new DateOnly(2026, 5, 5));
+            enrollment.EndEnrollment(benefitTermationDate);
 
             employee.Enrollments = new List<EmployeeEnrollment> { enrollment };
 
             await dbContext.Employees.AddAsync(employee, CancellationToken.None);
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetEmployeeBenefitsHandler(dbContext);
+            var handler = new GetEmployeeBenefitsHandler(dbContext, timeProvider.Object);
 
             var result = await handler.Handle(new GetEmployeeBenefitsQuery(employee.Id), CancellationToken.None);
 

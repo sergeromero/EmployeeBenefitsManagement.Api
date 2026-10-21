@@ -32,8 +32,10 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
         {
             await using var dbContext = CreateDbContext();
             var currentUserService = new Mock<ICurrentUserService>();
+            var timeProvider = new Mock<TimeProvider>();
 
             currentUserService.Setup(service => service.UserId).Returns(ANY_USER_ID);
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(new DateTime(2026, 05, 05));
             dbContext.Employees.Add(anyEmployee);
             
             var benefitType = new BenefitType { Name = "Health" };
@@ -62,7 +64,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
 
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object);
+            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             var result = await handler.Handle(
                 new GetBenefitPlansQuery(),
@@ -80,8 +82,10 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
         {
             await using var dbContext = CreateDbContext();
             var currentUserService = new Mock<ICurrentUserService>();
+            var timeProvider = new Mock<TimeProvider>();
 
             currentUserService.Setup(service => service.UserId).Returns(ANY_USER_ID);
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(new DateTime(2026, 05, 05));
             dbContext.Employees.Add(anyEmployee);
 
             var dental = new BenefitType { Name = "Dental" };
@@ -99,7 +103,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
 
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object);
+            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             var result = await handler.Handle(new GetBenefitPlansQuery(), CancellationToken.None);
 
@@ -117,8 +121,10 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
         {
             await using var dbContext = CreateDbContext();
             var currentUserService = new Mock<ICurrentUserService>();
+            var timeProvider = new Mock<TimeProvider>();
 
             currentUserService.Setup(service => service.UserId).Returns(ANY_USER_ID);
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(new DateTime(2026, 05, 05));
             dbContext.Employees.Add(anyEmployee);
 
             var benefitType = new BenefitType { Name = "Dental" };
@@ -137,7 +143,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
 
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object);
+            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             var result = await handler.Handle(new GetBenefitPlansQuery(), CancellationToken.None);
 
@@ -159,8 +165,10 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
         {
             await using var dbContext = CreateDbContext();
             var currentUserService = new Mock<ICurrentUserService>();
+            var timeProvider = new Mock<TimeProvider>();
 
             currentUserService.Setup(service => service.UserId).Returns(ANY_USER_ID);
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(new DateTime(2026, 05, 05));
             dbContext.Employees.Add(anyEmployee);
 
             var benefitType = new BenefitType { Name = "Health" };
@@ -171,7 +179,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
 
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object);
+            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             var result = await handler.Handle( new GetBenefitPlansQuery(), CancellationToken.None);
 
@@ -183,8 +191,10 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
         {
             await using var dbContext = CreateDbContext();
             var currentUserService = new Mock<ICurrentUserService>();
+            var timeProvider = new Mock<TimeProvider>();
 
             currentUserService.Setup(service => service.UserId).Returns(ANY_USER_ID);
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(new DateTime(2026, 05, 05));
             dbContext.Employees.Add(anyEmployee);
 
             var benefitType = new BenefitType { Name = "Health" };
@@ -196,7 +206,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
             AddEnrollment(dbContext, anyEmployee, plan);
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object);
+            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object, timeProvider.Object);
             var result = await handler.Handle(new GetBenefitPlansQuery(), CancellationToken.None);
 
             result.Should().ContainSingle();
@@ -209,8 +219,10 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
         {
             await using var dbContext = CreateDbContext();
             var currentUserService = new Mock<ICurrentUserService>();
+            var timeProvider = new Mock<TimeProvider>();
 
             currentUserService.Setup(service => service.UserId).Returns(ANY_USER_ID);
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(new DateTime(2026, 05, 05));
             dbContext.Employees.Add(anyEmployee);
 
             var benefitType = new BenefitType { Name = "Health" };
@@ -223,7 +235,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
             AddEnrollment(dbContext, anyEmployee, existingPlan);
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object);
+            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object, timeProvider.Object);
             var result = await handler.Handle(new GetBenefitPlansQuery(), CancellationToken.None);
 
             result.Should().HaveCount(2);
@@ -238,8 +250,10 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
         {
             await using var dbContext = CreateDbContext();
             var currentUserService = new Mock<ICurrentUserService>();
+            var timeProvider = new Mock<TimeProvider>();
 
             currentUserService.Setup(service => service.UserId).Returns(ANY_USER_ID);
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(DateTime.UtcNow.AddDays(1));
             dbContext.Employees.Add(anyEmployee);
 
             var benefitType = new BenefitType { Name = "Health" };
@@ -254,7 +268,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
             enrollment.EndEnrollment(DateOnly.FromDateTime(DateTime.UtcNow));
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object);
+            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object, timeProvider.Object);
             var result = await handler.Handle(new GetBenefitPlansQuery(), CancellationToken.None);
 
             result.Single(plan => plan.Id == cataloguePlan.Id).EnrollmentEligibility.Should().Be(
@@ -266,10 +280,12 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.BenefitPlans.Queri
         {
             await using var dbContext = CreateDbContext();
             var currentUserService = new Mock<ICurrentUserService>();
+            var timeProvider = new Mock<TimeProvider>();
 
             currentUserService.Setup(service => service.UserId).Returns(ANY_USER_ID);
+            timeProvider.Setup(provider => provider.GetUtcNow()).Returns(new DateTime(2026, 05, 05));
 
-            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object);
+            var handler = new GetBenefitPlansHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             var act = () => handler.Handle(new GetBenefitPlansQuery(), CancellationToken.None);
 

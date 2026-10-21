@@ -82,7 +82,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Enrollments.Create
             enrollment.EmployeeId.Should().Be(employee.Id);
             enrollment.BenefitPlanId.Should().Be(benefitPlan.Id);
             enrollment.EnrollmentDate.Should().Be(today);
-            enrollment.IsActive.Should().BeTrue();
+            enrollment.EndDate.Should().BeNull();
 
             currentUserService.VerifyGet(service => service.UserId, Times.Once);
         }
@@ -256,12 +256,12 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Enrollments.Create
 
             newEnrollment.EmployeeId.Should().Be(employee.Id);
             newEnrollment.EnrollmentDate.Should().Be(today);
-            newEnrollment.IsActive.Should().BeTrue();
+            newEnrollment.EndDate.Should().BeNull();
 
             var historicalEnrollment = enrollments.Single(enrollment => enrollment.BenefitPlanId == previousPlan.Id);
 
             historicalEnrollment.EndDate.Should().Be(today.AddDays(-1));
-            historicalEnrollment.IsActive.Should().BeFalse();
+            historicalEnrollment.EndDate.Should().NotBeNull();
         }
 
         [Fact]
@@ -566,7 +566,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Enrollments.Create
             enrollment.EmployeeId.Should().Be(employee.Id);
             enrollment.BenefitPlanId.Should().Be(benefitPlan.Id);
             enrollment.EnrollmentDate.Should().Be(futureDate);
-            enrollment.IsActive.Should().BeTrue();
+            enrollment.EndDate.Should().BeNull();
         }
     }
 }

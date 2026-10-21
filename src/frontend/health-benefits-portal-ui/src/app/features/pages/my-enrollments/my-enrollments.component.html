@@ -57,8 +57,21 @@
                                     <span class="metadata__label">Enrollment date</span>
                                     <span class="metadata__value">{{ enrollment.enrollmentDate | date:"mediumDate":"UTC" }}</span>
                                 </div>
+                                @if (enrollment.endDate) {
+                                    <div>
+                                        <span class="metadata__label">Scheduled termination</span>
+                                        <span class="metadata__value">
+                                            {{ enrollment.endDate | date:"mediumDate":"UTC" }}
+                                        </span>
+                                    </div>
+                                }
                             </div>
                         </mat-card-content>
+                        <div class="enrollment-card__actions">
+                            <button mat-flat-button type="button" (click)="terminateEnrollment(enrollment)">
+                                Terminate Enrollment
+                            </button>
+                        </div>
                     </mat-card>
                 }
             </div>

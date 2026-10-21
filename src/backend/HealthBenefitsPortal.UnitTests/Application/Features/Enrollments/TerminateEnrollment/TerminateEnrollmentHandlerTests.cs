@@ -94,7 +94,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Enrollments.Termin
             persistedEnrollment.BenefitPlanId.Should().Be(benefitPlan.Id);
             persistedEnrollment.EnrollmentDate.Should().Be(enrollmentDate);
             persistedEnrollment.EndDate.Should().Be(endDate);
-            persistedEnrollment.IsActive.Should().BeFalse();
+            persistedEnrollment.EndDate.Should().NotBeNull();
 
             (await dbContext.EmployeeEnrollments.CountAsync(CancellationToken.None)).Should().Be(1);
 
@@ -221,7 +221,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Enrollments.Termin
             var persistedEnrollment = await dbContext.EmployeeEnrollments.SingleAsync(CancellationToken.None);
 
             persistedEnrollment.EndDate.Should().Be(originalEndDate);
-            persistedEnrollment.IsActive.Should().BeFalse();
+            persistedEnrollment.EndDate.Should().NotBeNull();
         }
 
         [Fact]
@@ -299,7 +299,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Enrollments.Termin
             var persistedEnrollment = await dbContext.EmployeeEnrollments.SingleAsync(CancellationToken.None);
 
             persistedEnrollment.EndDate.Should().BeNull();
-            persistedEnrollment.IsActive.Should().BeTrue();
+            persistedEnrollment.EndDate.Should().BeNull();
         }
 
         [Fact]
@@ -450,7 +450,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Enrollments.Termin
                 .WithMessage($"No enrollment found with Employee Id {currentEmployee.Id} and Benefit Plan Id {command.BenefitPlanId}.");
 
             enrollment.EndDate.Should().BeNull();
-            enrollment.IsActive.Should().BeTrue();
+            enrollment.EndDate.Should().BeNull();
 
             currentUserService.VerifyGet(service => service.UserId, Times.Once);
         }

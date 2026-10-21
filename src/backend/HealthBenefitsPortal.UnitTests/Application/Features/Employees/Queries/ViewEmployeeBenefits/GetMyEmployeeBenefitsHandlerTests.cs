@@ -22,6 +22,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
         public async Task Handle_WhenCurrentUserHasActiveEmployee_ReturnsTheirBenefits()
         {
             await using var dbContext = new TestDbContext(_options);
+            var timeProvider = new Mock<TimeProvider>();
 
             var currentUserId = "user-123";
 
@@ -72,7 +73,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
             await dbContext.Employees.AddAsync(employee, CancellationToken.None);
             await dbContext.SaveChangesAsync(CancellationToken.None);
 
-            var handler = new GetMyEmployeeBenefitsHandler(dbContext, currentUserService.Object);
+            var handler = new GetMyEmployeeBenefitsHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             var result = await handler.Handle(new GetMyEmployeeBenefitsQuery(), CancellationToken.None);
 
@@ -92,11 +93,12 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
         public async Task Handle_WhenUserIdIsMissing_ThrowsNotFoundException()
         {
             await using var dbContext = new TestDbContext(_options);
+            var timeProvider = new Mock<TimeProvider>();
 
             var currentUserService = new Mock<ICurrentUserService>();
             currentUserService.Setup(service => service.UserId).Returns((string?)null);
 
-            var handler = new GetMyEmployeeBenefitsHandler(dbContext, currentUserService.Object);
+            var handler = new GetMyEmployeeBenefitsHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             var act = () => handler.Handle(new GetMyEmployeeBenefitsQuery(), CancellationToken.None);
 
@@ -110,6 +112,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
         public async Task Handle_WhenUserHasNotAnAssociatedEmployee_ThrowsNotFoundException()
         {
             await using var dbContext = new TestDbContext(_options);
+            var timeProvider = new Mock<TimeProvider>();
 
             var currentUserId = "user-123"; 
             var employee = new Employee 
@@ -132,7 +135,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
             var currentUserService = new Mock<ICurrentUserService>();
             currentUserService.Setup(service => service.UserId).Returns(currentUserId);
 
-            var handler = new GetMyEmployeeBenefitsHandler(dbContext, currentUserService.Object);
+            var handler = new GetMyEmployeeBenefitsHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             var act = () => handler.Handle(new GetMyEmployeeBenefitsQuery(), CancellationToken.None);
 
@@ -146,6 +149,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
         public async Task Handle_WhenMultipleEmployeesExist_ReturnsEmployeeLinkedToCurrentUser()
         {
             await using var dbContext = new TestDbContext(_options);
+            var timeProvider = new Mock<TimeProvider>();
 
             const string currentUserId = "user-123";
             const string otherUserId = "user-456";
@@ -218,7 +222,7 @@ namespace HealthBenefitsPortal.UnitTests.Application.Features.Employees.Queries.
             var currentUserService = new Mock<ICurrentUserService>();
             currentUserService.Setup(service => service.UserId).Returns(currentUserId);
 
-            var handler = new GetMyEmployeeBenefitsHandler(dbContext, currentUserService.Object);
+            var handler = new GetMyEmployeeBenefitsHandler(dbContext, currentUserService.Object, timeProvider.Object);
 
             await dbContext.Employees.AddRangeAsync(currentEmployee, otherEmployee);
             await dbContext.SaveChangesAsync(CancellationToken.None);

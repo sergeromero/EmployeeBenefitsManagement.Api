@@ -12,20 +12,24 @@ namespace Benefits.Application.Features.BenefitPlans.Queries.GetBenefitPlans
         private const string MissingEmployeeMessage = "No active employee record is linked to the authenticated user.";
         private readonly IBenefitsDbContext _dbContext;
         private readonly ICurrentUserService _currentUserService;
+        private readonly TimeProvider _timeProvider;
 
-        public GetBenefitPlansHandler(IBenefitsDbContext dbContext, ICurrentUserService currentUserService)
+        public GetBenefitPlansHandler(IBenefitsDbContext dbContext, ICurrentUserService currentUserService, TimeProvider timeProvider)
         {
             _dbContext = Guard.NotNull(dbContext);
             _currentUserService = Guard.NotNull(currentUserService);
+            _timeProvider = Guard.NotNull(timeProvider);
         }
 
         public async Task<IReadOnlyList<BenefitPlanListItemDto>> Handle(GetBenefitPlansQuery request, CancellationToken cancellationToken)
         {
             var employeeId = await GetCurrentEmployeeIdAsync(cancellationToken);
 
+            var today = DateOnly.FromDateTime(_timeProvider.GetUtcNow().DateTime);
+
             var activeEnrollments = await _dbContext.EmployeeEnrollments
                 .AsNoTracking()
-                .Where(e => e.EmployeeId == employeeId && e.EndDate == null)
+                .Where(e => e.EmployeeId == employeeId && (e.EndDate == null || e.EndDate >= today))
                 .Select(e => new
                 {
                     e.BenefitPlanId,

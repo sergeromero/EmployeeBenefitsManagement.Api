@@ -25,7 +25,7 @@ namespace Benefits.Application.Features.Enrollments.TerminateEnrollment
             var enrollment = await _dbContext.EmployeeEnrollments.SingleOrDefaultAsync(ee => ee.EmployeeId == employeeId && ee.BenefitPlanId == command.BenefitPlanId, cancellationToken)
                 ?? throw new NotFoundException($"No enrollment found with Employee Id {employeeId} and Benefit Plan Id {command.BenefitPlanId}.");
 
-            if (!enrollment.IsActive)
+            if (enrollment.EndDate is not null)
             {
                 throw new EnrollmentAlreadyTerminatedException($"Enrollment with Employee Id {employeeId} and Benefit Plan Id {command.BenefitPlanId} is already terminated.");
             }

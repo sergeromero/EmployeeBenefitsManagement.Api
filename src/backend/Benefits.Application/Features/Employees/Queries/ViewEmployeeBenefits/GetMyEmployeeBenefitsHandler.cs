@@ -9,7 +9,7 @@ namespace Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits
     {
         private readonly ICurrentUserService _currentUserService;
 
-        public GetMyEmployeeBenefitsHandler(IBenefitsDbContext dbContext, ICurrentUserService currentUserService) : base(dbContext)
+        public GetMyEmployeeBenefitsHandler(IBenefitsDbContext dbContext, ICurrentUserService currentUserService, TimeProvider timeProvider) : base(dbContext, timeProvider)
         {
             _currentUserService = Guard.NotNull(currentUserService);
         }

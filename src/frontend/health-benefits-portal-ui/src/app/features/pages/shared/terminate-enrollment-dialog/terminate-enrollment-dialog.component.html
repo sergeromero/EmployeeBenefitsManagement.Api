@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>Terminate Benefit Enrollment</h2>
+
+<mat-dialog-content>
+    <p>You are scheduling the end of your enrollment it:</p>
+    <section class="enrollment-summary" aria-label="Selected benefit enrollment">
+        <h3>{{ enrollment.benefitPlan }}</h3>
+        <p>{{ enrollment.benefitType }}</p>
+        <p>
+            <strong>Enrollment date:</strong>
+            {{ enrollment.enrollmentDate | date:"mediumDate":"UTC" }}
+        </p>
+    </section>
+
+    <form [formGroup]="form">
+        <mat-form-field appearance="outline">
+            <mat-label>Last active day</mat-label>
+
+            <input matInput [matDatepicker]="endDatePicker"
+                    [min]="minDate"
+                    formControlName="endDate"
+                    required/>
+            
+            <mat-datepicker-toggle matIconSuffix [for]="endDatePicker" />
+
+            <mat-datepicker #endDatePicker />
+
+            @if (form.controls.endDate.hasError("required")) {
+                <mat-error>An end date is required.</mat-error>
+            }
+
+            @if (form.controls.endDate.hasError("beforeEnrollmentDate")) {
+                <mat-error>The end date cannot precede the enrollment date.</mat-error>
+            }
+        </mat-form-field>
+    </form>
+    <p>Your enrollment will remain active through the selected date.</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-flat-button type="button" (click)="confirm()" [disabled]="form.invalid">Confirm termination</button>
+</mat-dialog-actions>

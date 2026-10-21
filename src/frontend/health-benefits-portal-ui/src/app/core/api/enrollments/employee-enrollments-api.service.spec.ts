@@ -6,6 +6,7 @@ import { EmployeeBenefitDto } from "@core/contracts/employee/employee-benefit.dt
 import { ApiClientService } from "../base/api-client.service";
 import { EmployeeEnrollmentsApiService } from "./employee-enrollments-api.service";
 import { CreateEnrollmentRequest } from "@core/contracts/enrollment/create-enrollment.request";
+import { TerminateEnrollmentRequest } from "@core/contracts/enrollment/terminate-enrollment.request";
 
 describe("EmployeeEnrollmentsApiService", () => {
     let service: EmployeeEnrollmentsApiService;
@@ -42,76 +43,107 @@ describe("EmployeeEnrollmentsApiService", () => {
         service = TestBed.inject(EmployeeEnrollmentsApiService);
     });
 
-    it("should request the current user's enrollments from the configured endpoint", () => {
-        const expectedResponse$ = of<EmployeeBenefitDto[]>([]);
+    describe("getMyEnrollments", () => {
+        it("should request the current user's enrollments from the configured endpoint", () => {
+            const expectedResponse$ = of<EmployeeBenefitDto[]>([]);
 
-        apiGet.mockReturnValue(expectedResponse$);
+            apiGet.mockReturnValue(expectedResponse$);
 
-        service.getMyEnrollments();
+            service.getMyEnrollments();
 
-        expect(apiGet).toHaveBeenCalledExactlyOnceWith(myEnrollmentsUrl);
+            expect(apiGet).toHaveBeenCalledExactlyOnceWith(myEnrollmentsUrl);
+        });
+
+        it("should return the Observable provided by the API client", () => {
+            const expectedResponse: EmployeeBenefitDto[] = [
+                {
+                    benefitPlanId: 1,
+                    benefitPlan: "Extended Health Coverage",
+                    benefitType: "Health",
+                    enrollmentDate: "2026-01-15",
+                    endDate: null,
+                    isActive: true
+                },
+                {
+                    benefitPlanId: 2,
+                    benefitPlan: "Previous Dental Coverage",
+                    benefitType: "Dental",
+                    enrollmentDate: "2024-03-01",
+                    endDate: "2025-12-31",
+                    isActive: false
+                }
+            ];
+            
+            const expectedResponse$ = of(expectedResponse);
+
+            apiGet.mockReturnValue(expectedResponse$);
+
+            const result$ = service.getMyEnrollments();
+
+            expect(result$).toBe(expectedResponse$);
+        });
     });
 
-    it("should return the Observable provided by the API client", () => {
-        const expectedResponse: EmployeeBenefitDto[] = [
-            {
-                benefitPlanId: 1,
-                benefitPlan: "Extended Health Coverage",
-                benefitType: "Health",
-                enrollmentDate: "2026-01-15",
-                endDate: null,
-                isActive: true
-            },
-            {
-                benefitPlanId: 2,
-                benefitPlan: "Previous Dental Coverage",
-                benefitType: "Dental",
-                enrollmentDate: "2024-03-01",
-                endDate: "2025-12-31",
-                isActive: false
-            }
-        ];
-        
-        const expectedResponse$ = of(expectedResponse);
+    describe("create", () => {
+        it("should submit the enrollment request to the configured endpoint", () => {
+            const anyBenefitId = 5;
+            const anyNonPastDate = "2026-10-31";
 
-        apiGet.mockReturnValue(expectedResponse$);
+            const request: CreateEnrollmentRequest = {
+                benefitPlanId: anyBenefitId,
+                enrollmentDate: anyNonPastDate
+            };
 
-        const result$ = service.getMyEnrollments();
+            apiPost.mockReturnValue(of(undefined));
 
-        expect(result$).toBe(expectedResponse$);
+            service.create(request);
+
+            expect(apiPost).toHaveBeenCalledExactlyOnceWith(enrollmentsUrl, request);
+        });
+
+        it("should return the observable provided by the API client", () => {
+            const anyBenefitId = 5;
+            const anyNonPastDate = "2026-10-31";
+
+            const request: CreateEnrollmentRequest = {
+                benefitPlanId: anyBenefitId,
+                enrollmentDate: anyNonPastDate
+            };
+
+            const expectedResponse$ = of(undefined);
+
+            apiPost.mockReturnValue(expectedResponse$);
+
+            const result$ = service.create(request);
+
+            expect(result$).toBe(expectedResponse$);
+        });
     });
 
-    it("should submit the enrollment request to the configured endpoint", () => {
-        const anyBenefitId = 5;
-        const anyNonPastDate = "2026-10-31";
-
-        const request: CreateEnrollmentRequest = {
-            benefitPlanId: anyBenefitId,
-            enrollmentDate: anyNonPastDate
+    describe("terminate", () => {
+        const request: TerminateEnrollmentRequest = {
+            benefitPlanId: 5,
+            endDate: "2026-10-31"
         };
 
-        apiPost.mockReturnValue(of(undefined));
+        it("should submit the termination request to the configured endpoint", () => {
+            apiPost.mockReturnValue(of(undefined));
 
-        service.create(request);
+            service.terminate(request);
 
-        expect(apiPost).toHaveBeenCalledExactlyOnceWith(enrollmentsUrl, request);
-    });
+            expect(apiPost).toHaveBeenCalledExactlyOnceWith(
+                `${enrollmentsUrl}/terminate`,
+                request
+            );
+        });
 
-    it("should return the observable provided by the API client", () => {
-        const anyBenefitId = 5;
-        const anyNonPastDate = "2026-10-31";
+        it("should return the observable provided by the API client", () => {
+            const expectedResponse$ = of(undefined);
+            apiPost.mockReturnValue(expectedResponse$);
 
-        const request: CreateEnrollmentRequest = {
-            benefitPlanId: anyBenefitId,
-            enrollmentDate: anyNonPastDate
-        };
+            const result$ = service.terminate(request);
 
-        const expectedResponse$ = of(undefined);
-
-        apiPost.mockReturnValue(expectedResponse$);
-
-        const result$ = service.create(request);
-
-        expect(result$).toBe(expectedResponse$);
+            expect(result$).toBe(expectedResponse$);
+        });
     });
 })

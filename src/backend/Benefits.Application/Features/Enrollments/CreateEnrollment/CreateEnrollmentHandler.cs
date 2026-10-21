@@ -76,9 +76,11 @@ namespace Benefits.Application.Features.Enrollments.CreateEnrollment
 
         private async Task EnsureNonDuplicateEnrollment(int employeeId, int enrollmentCategoryId, string benefitPlanName, CancellationToken cancellationToken)
         {
+            var today = DateOnly.FromDateTime(_timeProvider.GetUtcNow().DateTime);
+
             var isAlreadyEnrolled = await _dbContext.EmployeeEnrollments.AnyAsync(ee => ee.EmployeeId == employeeId
                         && ee.BenefitPlan.EnrollmentCategoryId == enrollmentCategoryId
-                        && ee.EndDate == null, cancellationToken);
+                        && (ee.EndDate == null || ee.EndDate >= today), cancellationToken);
 
             if (isAlreadyEnrolled)
             {

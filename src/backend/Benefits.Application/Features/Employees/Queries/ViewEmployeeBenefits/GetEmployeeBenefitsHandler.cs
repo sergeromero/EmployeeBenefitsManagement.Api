@@ -6,7 +6,7 @@ namespace Benefits.Application.Features.Employees.Queries.ViewEmployeeBenefits
 
     public sealed class GetEmployeeBenefitsHandler : GetEmployeeBenefitsHandlerBase, IRequestHandler<GetEmployeeBenefitsQuery, EmployeeBenefitsDto>
     {
-        public GetEmployeeBenefitsHandler(IBenefitsDbContext dbContext) : base(dbContext)
+        public GetEmployeeBenefitsHandler(IBenefitsDbContext dbContext, TimeProvider timeProvider) : base(dbContext, timeProvider)
         {
         }
 

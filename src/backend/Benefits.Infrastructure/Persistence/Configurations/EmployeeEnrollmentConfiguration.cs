@@ -17,8 +17,6 @@ namespace Benefits.Infrastructure.Persistence.Configurations
             builder.Property(x => x.EndDate)
                 .HasColumnType("date")
                 .IsRequired(false);
-
-            builder.Ignore(x => x.IsActive);
         }
     }
 }
