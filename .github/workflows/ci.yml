@@ -13,7 +13,6 @@ jobs:
 backend:
 runs-on: ubuntu-latest
 
-```
 defaults:
   run:
     working-directory: src/backend
@@ -35,4 +34,4 @@ steps:
 
   - name: Run unit tests
     run: dotnet test --no-build
-```
+
